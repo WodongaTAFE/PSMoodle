@@ -115,7 +115,7 @@ function Set-MoodleUser {
         }
 
         $body["users[$i][id]"] = $Id
-       
+
         foreach ($key in $params.Keys) {
             if ($PSBoundParameters.ContainsKey($key)) {
                 $body["users[$i][$key]"] = $params[$key]

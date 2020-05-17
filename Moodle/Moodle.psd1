@@ -69,7 +69,7 @@
     # NestedModules = @()
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = '*'
+    FunctionsToExport = @('Connect-Moodle', 'Disconnect-Moodle', 'Get-MoodleCourse', 'Get-MoodleCourseCategory', 'Get-MoodleCurrentSessionInfo', 'Get-MoodleEnrolledUser', 'Get-MoodleUser', 'Get-MoodleUserCourse', 'New-MoodleEnrolment', 'New-MoodleUser', 'Remove-MoodleEnrolment', 'Set-MoodleUser')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = @()
@@ -98,10 +98,10 @@
             Tags = @('moodle', 'lms')
     
             # A URL to the license for this module.
-            # LicenseUri = ''
+            LicenseUri = 'https://github.com/mabster/PSMoodle/blob/master/LICENSE'
     
             # A URL to the main website for this project.
-            # ProjectUri = ''
+            ProjectUri = 'https://github.com/mabster/PSMoodle'
     
             # A URL to an icon representing this module.
             # IconUri = ''
