@@ -21,13 +21,13 @@
     GUID = '0883dd29-2494-46e4-af6f-840c27af574a'
     
     # Author of this module
-    Author = 'mabster'
+    Author = 'Matt Hamilton'
     
     # Company or vendor of this module
     CompanyName = 'mabster.net'
     
     # Copyright statement for this module
-    Copyright = '(c) 2019 mabster. All rights reserved.'
+    Copyright = '(c) 2020 Matt Hamilton. All rights reserved.'
     
     # Description of the functionality provided by this module
     Description = 'Connect with Moodle web services to manage a Moodle instance.'
