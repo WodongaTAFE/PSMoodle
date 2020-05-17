@@ -24,10 +24,10 @@
     Author = 'Matt Hamilton'
     
     # Company or vendor of this module
-    CompanyName = 'mabster.net'
+    CompanyName = 'Wodonga Institute of TAFE'
     
     # Copyright statement for this module
-    Copyright = '(c) 2020 Matt Hamilton. All rights reserved.'
+    Copyright = '(c) 2020 Wodonga Institute of TAFE. All rights reserved.'
     
     # Description of the functionality provided by this module
     Description = 'Connect with Moodle web services to manage a Moodle instance.'
@@ -98,10 +98,10 @@
             Tags = @('moodle', 'lms')
     
             # A URL to the license for this module.
-            LicenseUri = 'https://github.com/mabster/PSMoodle/blob/master/LICENSE'
+            LicenseUri = 'https://github.com/WodongaTAFE/PSMoodle/blob/master/LICENSE'
     
             # A URL to the main website for this project.
-            ProjectUri = 'https://github.com/mabster/PSMoodle'
+            ProjectUri = 'https://github.com/WodongaTAFE/PSMoodle'
     
             # A URL to an icon representing this module.
             # IconUri = ''
