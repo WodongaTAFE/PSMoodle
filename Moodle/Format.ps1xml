@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+<SelectionSets>
+    <SelectionSet>
+    <Name>UserTypes</Name>
+        <Types>
+            <TypeName>MoodleUser</TypeName>
+            <TypeName>MoodleUserDetails</TypeName>
+        </Types>
+    </SelectionSet>
+    </SelectionSets>
+    <ViewDefinitions>
+        <View>
+            <Name>MoodleUser</Name>
+            <ViewSelectedBy>
+                <SelectionSetName>UserTypes</SelectionSetName>
+            </ViewSelectedBy>
+
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Id</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>UserName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>FirstName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>LastName</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Email</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+        <View>
+            <Name>MoodleUser</Name>
+            <ViewSelectedBy>
+                <TypeName>MoodleUser</TypeName>
+            </ViewSelectedBy>
+            
+            <TableControl>
+                <AutoSize />
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Width>6</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>16</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>16</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>16</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Width>32</Width>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Id</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>UserName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>FirstName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>LastName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Email</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <View>
+            <Name>MoodleUser</Name>
+            <ViewSelectedBy>
+                <TypeName>MoodleUser</TypeName>
+            </ViewSelectedBy>
+            
+            <WideControl>
+                <AutoSize />
+                <WideEntries>
+                    <WideEntry>
+                        <WideItem>
+                            <PropertyName>UserName</PropertyName>
+                        </WideItem>
+                    </WideEntry>
+                </WideEntries>
+            </WideControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
