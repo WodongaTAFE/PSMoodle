@@ -5,7 +5,7 @@ This module contains some helpful cmdlets for managing Moodle users and enrolmen
 
 ## Installing
 
-When the module is released to the PowerShell Gallery, you can install it like this from an elevated prompt:
+The module can be installed from the PowerShell Gallery from an elevated prompt using this command:
 
     Install-Module Moodle
 
@@ -22,6 +22,14 @@ To use an existing Moodle API token:
     Connect-Moodle -Uri 'https://sandbox.moodledemo.net' -Token '<your token here>'
 
 Note: For the module to connect, the user or app token must have access to the `core_webservice_get_site_info` function in your Moodle instance.
+
+## Disconnecting
+
+To ensure the Moodle token is not preserved in your session, you can disconnect from the Moodle instance using this command:
+
+    Disconnect-Moodle
+
+Note that no network connections are maintained that need to be cleaned up with this command. It's only used to clear the locally cached URI and token.
 
 ## Cmdlets
 
