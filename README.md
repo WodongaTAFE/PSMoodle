@@ -32,7 +32,7 @@ Once you're connected, you have a bunch of commands you can use to query and/or 
 * Get-MoodleCurrentSessionInfo
 * Get-MoodleEnrolledUser
 * Get-MoodleUser
-* Get-MoodleUserCourses
+* Get-MoodleUserCourse
 * New-MoodleEnrolment
 * New-MoodleUser
 * Remove-MoodleEnrolment
