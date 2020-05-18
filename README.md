@@ -21,6 +21,8 @@ To use an existing Moodle API token:
 
     Connect-Moodle -Uri 'https://sandbox.moodledemo.net' -Token '<your token here>'
 
+Note: For the module to connect, the user or app token must have access to the `core_webservice_get_site_info` function in your Moodle instance.
+
 ## Cmdlets
 
 Once you're connected, you have a bunch of commands you can use to query and/or update the connected Moodle instance:
