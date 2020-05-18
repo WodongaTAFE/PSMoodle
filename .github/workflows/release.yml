@@ -1,0 +1,16 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Publish
+      run: |
+        powershell -Command "Publish-Module -Path ./Moodle -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }}"
