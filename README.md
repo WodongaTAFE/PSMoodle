@@ -15,11 +15,11 @@ The first thing you'll need to do is connect to a Moodle instance. We do this wi
 
 To have PowerShell ask for a username and password and then connect with those credentials:
 
-    Connect-Moodle -Uri 'https://sandbox.moodledemo.net' -Credential (Get-Credentials)	
+    Connect-Moodle -Url 'https://sandbox.moodledemo.net' -Credential (Get-Credential)	
 
 To use an existing Moodle API token:
 
-    Connect-Moodle -Uri 'https://sandbox.moodledemo.net' -Token '<your token here>'
+    Connect-Moodle -Url 'https://sandbox.moodledemo.net' -Token '<your token here>'
 
 Note: For the module to connect, the user or app token must have access to the `core_webservice_get_site_info` function in your Moodle instance.
 
