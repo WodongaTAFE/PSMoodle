@@ -3,10 +3,10 @@
 Connects to a Moodle instance with an authentication token or credentials.
 
 .DESCRIPTION
-Call Connect-Moodle to connect to a Moodle instance (using its URL and credentials or token) before calling other Moodle cmdlets.
+Call Connect-Moodle to connect to a Moodle instance (using its URI and credentials or token) before calling other Moodle cmdlets.
 
-.PARAMETER Url
-The base URL of the Moodle instance.
+.PARAMETER Uri
+The base URI of the Moodle instance.
 
 .PARAMETER Credential
 Specifies a PSCredential object. For more information about the PSCredential object, type Get-Help Get-Credential.
@@ -28,9 +28,10 @@ See also: Disconnect-Moodle.
 function Connect-Moodle {
     [CmdletBinding(DefaultParameterSetName='cred')]
     param (
-        # The base URL of your Moodle instance.
+        # The base URI of your Moodle instance.
         [Parameter(Mandatory,Position=0)]
-        [uri]$Url,
+        [Alias('Url')]
+        [uri]$Uri,
 
         # Secure login credentials for your Moodle instance.
         [Parameter(Mandatory,Position=1,ParameterSetName='cred')]
@@ -48,7 +49,7 @@ function Connect-Moodle {
         $pwd = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Credential.Password) )
 
         $path = "/login/token.php?service=moodle_mobile_app&username=$($Credential.UserName)&password=$pwd"
-        $result = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+        $result = Invoke-RestMethod -Uri ([uri]::new($Uri, $path))
 
         $Token = $result.token
         if (!$Token) {
@@ -58,14 +59,14 @@ function Connect-Moodle {
 
     $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     
-    $result  = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+    $result  = Invoke-RestMethod -Uri ([uri]::new($Uri, $path))
     
     if ($result.SiteName) {
         Write-Verbose "Connected to $($result.SiteName) as user $($result.UserName)."
     
-        $PsCmdlet.SessionState.PSVariable.Set("_MoodleUrl", $Url)
+        $PsCmdlet.SessionState.PSVariable.Set("_MoodleUrl", $Uri)
         $PsCmdlet.SessionState.PSVariable.Set("_MoodleToken", $Token)
     } else {
-        throw "Could not connect to $Url with the given token."
+        throw "Could not connect to $Uri with the given token."
     }    
 }
