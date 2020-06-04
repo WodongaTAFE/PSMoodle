@@ -12,7 +12,7 @@
     RootModule = 'Moodle.psm1'
     
     # Version number of this module.
-    ModuleVersion = '0.2'
+    ModuleVersion = '0.4'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@
     # NestedModules = @()
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Connect-Moodle', 'Disconnect-Moodle', 'Get-MoodleCourse', 'Get-MoodleCourseCategory', 'Get-MoodleCurrentSessionInfo', 'Get-MoodleEnrolledUser', 'Get-MoodleUser', 'Get-MoodleUserCourse', 'New-MoodleEnrolment', 'New-MoodleUser', 'Remove-MoodleEnrolment', 'Set-MoodleUser')
+    FunctionsToExport = @('Add-MoodleCohortMember', 'Connect-Moodle', 'Disconnect-Moodle', 'Get-MoodleCohort', 'Get-MoodleCohortMember', 'Get-MoodleCourse', 'Get-MoodleCourseCategory', 'Get-MoodleCurrentSessionInfo', 'Get-MoodleEnrolledUser', 'Get-MoodleUser', 'Get-MoodleUserCourse', 'New-MoodleCohort', 'New-MoodleEnrolment', 'New-MoodleUser', 'Remove-MoodleCohort', 'Remove-MoodleCohortMember', 'Remove-MoodleEnrolment', 'Set-MoodleCohort', 'Set-MoodleUser')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = @()

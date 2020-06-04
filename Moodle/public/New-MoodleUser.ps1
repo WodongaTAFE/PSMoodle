@@ -27,7 +27,7 @@ Specifies the new user's last name.
 Specifies a free-text ID Number for the new user.
 
 .EXAMPLE
-New-User -GeneratePassword -UserName jbloggs -Email jbloggs@example.com -FirstName Joe -LastName Bloggs
+New-MoodleUser -GeneratePassword -UserName jbloggs -Email jbloggs@example.com -FirstName Joe -LastName Bloggs
 
 Creates a new user for Joe Bloogs with username jbloggs. Moodle will generate a password and email it to him.
 

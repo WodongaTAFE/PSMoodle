@@ -20,7 +20,7 @@ Specifies the role the user will take in the course. Defaults to student.
 .EXAMPLE
 New-MoodleEnrolment -UserId 1 -CourseId 1 -Role Student
 
-Enroles user #1 as a student in course #1.
+Enrols user #1 as a student in course #1.
 
 .EXAMPLE
 Get-MoodleUser -UserName jbloggs | New-MoodleEnrolment -CourseId 1
@@ -35,25 +35,23 @@ Enrols user #1 as a teacher in a course with short name 'NET101'.
 function New-MoodleEnrolment {
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='id')]
     param (
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='userpipeline')]
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='userpipelinewithcourse')]
-        [Parameter(Mandatory,Position=0,ParameterSetName='coursepipelinewithuser')]
+        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='user-courseid')]
+        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='user-course')]
         [MoodleUser]
         $User,
 
-        [Parameter(Mandatory,ParameterSetName='userpipeline')]
         [Parameter(Mandatory,ParameterSetName='id')]
+        [Parameter(Mandatory,ParameterSetName='user-courseid')]
         [int]
         $CourseId,
 
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='coursepipeline')]
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='coursepipelinewithuser')]
-        [Parameter(Mandatory,Position=0,ParameterSetName='userpipelinewithcourse')]
+        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='user-course')]
+        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='course-userid')]
         [MoodleCourse]
         $Course,
 
-        [Parameter(Mandatory,ParameterSetName='coursepipeline')]
         [Parameter(Mandatory,ParameterSetName='id')]
+        [Parameter(Mandatory,ParameterSetName='course-userid')]
         [int]
         $UserId,
 
