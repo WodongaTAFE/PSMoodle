@@ -1,3 +1,4 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('TypeNotFound', 'DescriptionFormat')]
 class MoodleCohort {
     [int]$Id
 
@@ -14,9 +15,3 @@ class MoodleCohort {
     [string]$Theme
 }
 
-enum MoodleDescriptionFormat {
-    Moodle = 0;
-    HTML = 1;
-    Plain = 2;
-    Markdown = 4;
-}

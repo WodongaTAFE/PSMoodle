@@ -1,3 +1,4 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('TypeNotFound', 'MoodleDescriptionFormat')]
 class MoodleCourseCategory {
     [int]$Id
 
@@ -6,6 +7,8 @@ class MoodleCourseCategory {
     [string]$IdNumber
 
     [string]$Description
+
+    [MoodleDescriptionFormat]$DescriptionFormat
 
     [int]$Parent
 

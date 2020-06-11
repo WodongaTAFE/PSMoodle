@@ -35,25 +35,25 @@ Enrols user #1 as a teacher in a course with short name 'NET101'.
 function New-MoodleEnrolment {
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='id')]
     param (
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='user-courseid')]
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='user-course')]
+        [Parameter(Mandatory,Position=0,ParameterSetName='userid course')]
+        [Parameter(Mandatory,Position=0,ParameterSetName='userid courseid')]
+        [int]
+        $UserId,
+
+        [Parameter(Mandatory,ValueFromPipeline,Position=0,ParameterSetName='user course')]
+        [Parameter(Mandatory,ValueFromPipeline,Position=0,ParameterSetName='user courseid')]
         [MoodleUser]
         $User,
 
-        [Parameter(Mandatory,ParameterSetName='id')]
-        [Parameter(Mandatory,ParameterSetName='user-courseid')]
-        [int]
-        $CourseId,
-
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='user-course')]
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='course-userid')]
+        [Parameter(Mandatory,ValueFromPipeline,Position=1,ParameterSetName='userid course')]
+        [Parameter(Mandatory,ValueFromPipeline,Position=1,ParameterSetName='user course')]
         [MoodleCourse]
         $Course,
 
-        [Parameter(Mandatory,ParameterSetName='id')]
-        [Parameter(Mandatory,ParameterSetName='course-userid')]
+        [Parameter(Mandatory,Position=1,ParameterSetName='user courseid')]
+        [Parameter(Mandatory,Position=1,ParameterSetName='userid courseid')]
         [int]
-        $UserId,
+        $CourseId,
 
         [Parameter()]
         [ValidateSet('Manager','CourseCreator','EditingTeacher','Teacher','Student','Guest','User','FrontPage')]

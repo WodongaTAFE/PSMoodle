@@ -73,7 +73,7 @@ function Get-MoodleCourseCategory {
         $index = 0
         foreach ($key in $params.Keys) {
             if ($PSBoundParameters.ContainsKey($key)) {
-                $path = $path + "&criteria[$index][key]=$($key)&criteria[$index][value]=$($params[$key])"
+                $path = $path + "&criteria[$index][key]=$key&criteria[$index][value]=$($params[$key])"
                 $index++
             }
         }
@@ -83,7 +83,8 @@ function Get-MoodleCourseCategory {
                 Id = $_.id
                 Name = $_.name
                 IdNumber = $_.idnumber
-                Description = $_.Description
+                Description = $_.description
+                DescriptionFormat = $_.descriptionformat
                 parent = $_.parent
                 Visible = $_.visible
             }
