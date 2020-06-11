@@ -5,7 +5,7 @@ This module contains some helpful cmdlets for managing Moodle users and enrolmen
 
 ## Installing
 
-The module can be installed from the PowerShell Gallery from an elevated prompt using this command:
+The module can be installed from the [PowerShell Gallery](https://www.powershellgallery.com/packages/Moodle/) from an elevated prompt using this command:
 
     Install-Module Moodle
 
