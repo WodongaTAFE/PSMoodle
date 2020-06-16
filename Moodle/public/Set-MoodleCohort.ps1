@@ -46,7 +46,7 @@ function Set-MoodleCohort {
         [Parameter(Mandatory,ParameterSetName='id-system',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='id-catid',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='id-category',ValueFromPipelineByPropertyName)]
-        [string] $Id,
+        [int] $Id,
 
         [Parameter(Mandatory,ParameterSetName='cohort-system',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='cohort-catid',ValueFromPipelineByPropertyName)]
