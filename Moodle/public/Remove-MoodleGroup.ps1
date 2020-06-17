@@ -17,7 +17,7 @@ function Remove-MoodleGroup {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory,Position=0,ParameterSetName='id',ValueFromPipelineByPropertyName)]
-        [string] $Id,
+        [int] $Id,
 
         [Parameter(Mandatory,ParameterSetName='group',ValueFromPipelineByPropertyName)]
         [MoodleGroup] $Group

@@ -85,7 +85,7 @@ function Get-MoodleCourseCategory {
                 IdNumber = $_.idnumber
                 Description = $_.description
                 DescriptionFormat = $_.descriptionformat
-                parent = $_.parent
+                Parent = $_.parent
                 Visible = $_.visible
             }
         }

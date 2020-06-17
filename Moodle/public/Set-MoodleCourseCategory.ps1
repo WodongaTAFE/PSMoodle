@@ -1,41 +1,44 @@
 <#
 .SYNOPSIS
-Updates a Moodle group.
+Updates a Moodle course category.
 
 .PARAMETER Id
-Specifies the unique ID of the group to update.
+Specifies the unique ID of the course category to update.
 
-.PARAMETER Group
-Specifies the group to update.
+.PARAMETER Category
+Specifies the course category to update.
 
 .PARAMETER Name
-Specifies the name of the group.
+Specifies the name of the course category.
 
 .PARAMETER Description
-Specifies the description of the group.
+Specifies the description of the course category.
 
 .PARAMETER DescriptionFormat
 Specifies the format of the given description.
 
-.PARAMETER EnrolmentKey
-Specifies the secret enrolment key of the group/course.
+.PARAMETER Parent
+Specifies the unique id of the parent category.
+
+.PARAMETER Theme
+Specifies the theme of the course category.
 
 .PARAMETER IdNumber
-Specifies a free-text ID Number for the group.
+Specifies a free-text ID Number for the course category.
 
 .EXAMPLE
-Set-MoodleGroup -Id 1 -Name 'My Group' -Description 'Just a group!'
+Set-MoodleCourseCategory -Id 1 -Name 'My Category' -Description 'Just a category!'
 
-Updates group #1's name and description.
+Updates course category #1's name and description.
 #>
-function Set-MoodleGroup {
+function Set-MoodleCourseCategory {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory,ParameterSetName='id')]
+        [Parameter(Mandatory,ParameterSetName='id',ValueFromPipelineByPropertyName)]
         [int] $Id,
 
-        [Parameter(Mandatory,ParameterSetName='group',ValueFromPipeline)]
-        [MoodleGroup] $Group,
+        [Parameter(Mandatory,ParameterSetName='category',ValueFromPipeline)]
+        [MoodleCourseCategory] $Category,
 
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $Name,
@@ -47,7 +50,11 @@ function Set-MoodleGroup {
         [MoodleDescriptionFormat] $DescriptionFormat,
 
         [Parameter(ValueFromPipelineByPropertyName)]
-        [string] $EnrolmentKey,
+        [Alias('ParentId')]
+        [int] $Parent,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [string] $Theme,
 
         [Parameter(ValueFromPipelineByPropertyName)]
         [string] $IdNumber
@@ -61,13 +68,13 @@ function Set-MoodleGroup {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
 
-        $function = 'core_group_update_groups'
+        $function = 'core_course_update_categories'
         $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     }
 
     Process {
-        if ($Group) {
-            $Id = $Group.Id
+        if ($Category) {
+            $Id = $Category.Id
         }
 
         $params = @{
@@ -75,16 +82,17 @@ function Set-MoodleGroup {
             idnumber = $IdNumber
             description = $Description
             descriptionformat = [int]$DescriptionFormat
-            enrolmentkey = $EnrolmentKey
+            parent = $Parent
+            theme = $Theme
         }
 
         $body = @{
-            'groups[0][id]' = $Id
+            'categories[0][id]' = $Id
         }
 
         foreach ($key in $params.Keys) {
             if ($PSBoundParameters.ContainsKey($key)) {
-                $body["groups[0][$key]"] = $params[$key]
+                $body["categories[0][$key]"] = $params[$key]
             }
         }
 

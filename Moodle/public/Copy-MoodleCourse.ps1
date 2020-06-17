@@ -34,7 +34,7 @@ function Copy-MoodleCourse {
         [Parameter(Mandatory,ParameterSetName='id')]
         [int] $Id,
 
-        [Parameter(Mandatory,ParameterSetName='course')]
+        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='course')]
         [MoodleCourse] $Course,
 
         [Parameter(Mandatory)]
