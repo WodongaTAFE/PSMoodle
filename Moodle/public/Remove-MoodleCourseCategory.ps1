@@ -2,11 +2,20 @@
 .SYNOPSIS
 Deletes a Moodle course category.
 
+.DESCRIPTION
+Deletes a course category and reparents or deletes all subcategories.
+
 .PARAMETER Id
 Specifies the unique ID of the course category to delete.
 
 .PARAMETER Category
 Specifies the course category to delete.
+
+.PARAMETER Recurse
+If specified, all subcategories under the given category will also be deleted.
+
+.PARAMETER Parent
+Specifies the new parent of any subcategories.
 
 .EXAMPLE
 Remove-MoodleCourseCategory -Id 1

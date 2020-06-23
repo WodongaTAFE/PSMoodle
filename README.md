@@ -35,17 +35,33 @@ Note that no network connections are maintained that need to be cleaned up with 
 
 Once you're connected, you have a bunch of commands you can use to query and/or update the connected Moodle instance:
 
+* Add-MoodleCohortMember
 * Connect-Moodle
+* Copy-MoodleCourse
 * Disconnect-Moodle
+* Get-MoodleCohort
+* Get-MoodleCohortMember
 * Get-MoodleCourse
 * Get-MoodleCourseCategory
 * Get-MoodleCurrentSessionInfo
 * Get-MoodleEnrolledUser
+* Get-MoodleGroup
+* Get-MoodleGroupMember
 * Get-MoodleUser
 * Get-MoodleUserCourse
+* New-MoodleCohort
+* New-MoodleCourseCategory
 * New-MoodleEnrolment
+* New-MoodleGroup
 * New-MoodleUser
+* Remove-MoodleCohort
+* Remove-MoodleCohortMember
+* Remove-MoodleCourseCategory
 * Remove-MoodleEnrolment
+* Remove-MoodleGroup
+* Set-MoodleCohort
+* Set-MoodleCourseCategory
+* Set-MoodleGroup
 * Set-MoodleUser
 
 So if you want to see all the users enrolled courses in the induction category, you can use this command:
