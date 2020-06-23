@@ -88,7 +88,7 @@ function Set-MoodleUser {
 
         if ($Password) {
             $marshal = [Runtime.InteropServices.Marshal]
-            $pwd = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
+            $rawpwd = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
         }
 
         $function = 'core_user_update_users'
@@ -106,7 +106,7 @@ function Set-MoodleUser {
         $params = @{
             username = $UserName
             auth = $Auth.ToLower()
-            password = $pwd
+            password = $rawpwd
             firstname = $FirstName
             lastname = $LastName
             email = $Email
