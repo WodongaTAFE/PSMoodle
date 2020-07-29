@@ -39,6 +39,7 @@ Once you're connected, you have a bunch of commands you can use to query and/or 
 * Connect-Moodle
 * Copy-MoodleCourse
 * Disconnect-Moodle
+* Find-MoodleCourse
 * Get-MoodleCohort
 * Get-MoodleCohortMember
 * Get-MoodleCourse

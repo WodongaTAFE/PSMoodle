@@ -69,7 +69,7 @@
     # NestedModules = @()
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Add-MoodleCohortMember', 'Connect-Moodle', 'Copy-MoodleCourse', 'Disconnect-Moodle', 'Get-MoodleCohort', 'Get-MoodleCohortMember', 'Get-MoodleCourse', 'Get-MoodleCourseCategory', 'Get-MoodleCurrentSessionInfo', 'Get-MoodleEnrolledUser', 'Get-MoodleGroup', 'Get-MoodleGroupMember', 'Get-MoodleUser', 'Get-MoodleUserCourse', 'New-MoodleCohort', 'New-MoodleCourseCategory', 'New-MoodleEnrolment', 'New-MoodleGroup', 'New-MoodleUser', 'Remove-MoodleCohort', 'Remove-MoodleCohortMember', 'Remove-MoodleCourseCategory', 'Remove-MoodleEnrolment', 'Remove-MoodleGroup', 'Set-MoodleCohort', 'Set-MoodleCourseCategory', 'Set-MoodleGroup', 'Set-MoodleUser')
+    FunctionsToExport = @('Add-MoodleCohortMember', 'Connect-Moodle', 'Copy-MoodleCourse', 'Disconnect-Moodle', 'Find-MoodleCourse', 'Get-MoodleCohort', 'Get-MoodleCohortMember', 'Get-MoodleCourse', 'Get-MoodleCourseCategory', 'Get-MoodleCurrentSessionInfo', 'Get-MoodleEnrolledUser', 'Get-MoodleGroup', 'Get-MoodleGroupMember', 'Get-MoodleUser', 'Get-MoodleUserCourse', 'New-MoodleCohort', 'New-MoodleCourseCategory', 'New-MoodleEnrolment', 'New-MoodleGroup', 'New-MoodleUser', 'Remove-MoodleCohort', 'Remove-MoodleCohortMember', 'Remove-MoodleCourseCategory', 'Remove-MoodleEnrolment', 'Remove-MoodleGroup', 'Set-MoodleCohort', 'Set-MoodleCourseCategory', 'Set-MoodleGroup', 'Set-MoodleUser')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = @()
