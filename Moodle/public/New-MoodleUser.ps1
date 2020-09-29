@@ -71,7 +71,7 @@ function New-MoodleUser {
         }
 
         $function = 'core_user_create_users'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     }
 
     Process {
@@ -89,8 +89,8 @@ function New-MoodleUser {
 
         } else {
             $marshal = [Runtime.InteropServices.Marshal]
-            $pwd = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
-            $body['users[0][password]'] = $pwd
+            $pass = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
+            $body['users[0][password]'] = $pass
         }
 
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {

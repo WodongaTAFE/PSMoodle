@@ -11,7 +11,7 @@ function Get-MoodleCurrentSessionInfo {
     }
 
     $function = 'core_webservice_get_site_info'
-    $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+    $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
     $result  = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
     New-Object -TypeName MoodleSessionInfo -Property @{

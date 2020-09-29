@@ -59,7 +59,7 @@ function New-MoodleCourseCategory {
         }
 
         $function = 'core_course_create_categories'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     }
 
     Process {

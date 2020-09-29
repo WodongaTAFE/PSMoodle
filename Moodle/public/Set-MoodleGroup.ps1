@@ -62,7 +62,7 @@ function Set-MoodleGroup {
         }
 
         $function = 'core_group_update_groups'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     }
 
     Process {

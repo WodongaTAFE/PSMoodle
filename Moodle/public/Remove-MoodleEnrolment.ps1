@@ -64,7 +64,7 @@ function Remove-MoodleEnrolment {
         }
 
         $function = 'enrol_manual_unenrol_users'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         $body = @{}
         $i = 0

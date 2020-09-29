@@ -40,7 +40,7 @@ function Get-MoodleUserCourse {
     }
     
     Process {
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         if ($User) {
             $UserId = $User.Id

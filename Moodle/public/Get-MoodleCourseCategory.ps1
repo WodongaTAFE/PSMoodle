@@ -59,7 +59,7 @@ function Get-MoodleCourseCategory {
     }
     
     Process {
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
         $path = $path + "&addsubcategories=$(if ($Recurse) { 1 } else { 0 })"
 
         $params = @{

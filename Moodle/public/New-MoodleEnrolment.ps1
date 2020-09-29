@@ -70,7 +70,7 @@ function New-MoodleEnrolment {
         }
 
         $function = 'enrol_manual_enrol_users'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         $body = @{}
         $i = 0

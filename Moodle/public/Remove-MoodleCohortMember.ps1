@@ -62,7 +62,7 @@ function Remove-MoodleCohortMember {
         }
 
         $function = 'core_cohort_delete_cohort_members'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         $body = @{}
         $i = 0

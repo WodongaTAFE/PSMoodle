@@ -46,9 +46,9 @@ function Connect-Moodle {
     if ($Credential) {
         # Extract plain text password from credential
         $marshal = [Runtime.InteropServices.Marshal]
-        $pwd = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Credential.Password) )
+        $password = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Credential.Password) )
 
-        $path = "/login/token.php?service=moodle_mobile_app&username=$($Credential.UserName)&password=$pwd"
+        $path = "login/token.php?service=moodle_mobile_app&username=$($Credential.UserName)&password=$password"
         $result = Invoke-RestMethod -Uri ([uri]::new($Uri, $path))
 
         $Token = $result.token
@@ -57,7 +57,7 @@ function Connect-Moodle {
         }
     }
 
-    $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+    $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     
     $result  = Invoke-RestMethod -Uri ([uri]::new($Uri, $path))
     

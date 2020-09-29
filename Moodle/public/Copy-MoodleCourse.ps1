@@ -58,7 +58,7 @@ function Copy-MoodleCourse {
         }
 
         $function = 'core_course_import_course'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     }
 
     Process {

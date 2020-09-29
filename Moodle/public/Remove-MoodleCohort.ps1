@@ -32,7 +32,7 @@ function Remove-MoodleCohort {
         }
 
         $function = 'core_cohort_delete_cohorts'
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
     }
 
     Process {

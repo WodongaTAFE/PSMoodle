@@ -41,7 +41,7 @@ function Get-MoodleGroupMember {
     }
     
     Process {
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         if ($Groupt) {
             $Id = $Group.Id

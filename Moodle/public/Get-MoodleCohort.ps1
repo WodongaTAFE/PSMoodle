@@ -58,7 +58,7 @@ function Get-MoodleCohort {
     }
     
     Process {
-        $path = "/webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         if ($PSBoundParameters.ContainsKey('id')) {
             $path += "&cohortids[0]=$Id"
