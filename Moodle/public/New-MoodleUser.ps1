@@ -44,7 +44,7 @@ function New-MoodleUser {
 
         # The user's authentication type.
         [Parameter(Mandatory)]
-        [ValidateSet('Manual','LDAP','SAML2')]
+        [ValidateSet('Manual','LDAP','SAML2','OIDC')]
         [string]$Auth,
 
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$UserName,

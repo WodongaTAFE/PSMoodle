@@ -48,34 +48,42 @@ Suspends a user whose user name is 'jbloggs'.
 function Set-MoodleUser {
     [CmdletBinding(DefaultParameterSetName='id',SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory,ParameterSetName='id',Position=0)][int]$Id,
+        [Parameter(Mandatory,ParameterSetName='id',Position=0)]
+        [int]$Id,
 
-        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='pipelineuser')][MoodleUser]$User,
+        [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='pipelineuser')]
+        [MoodleUser]$User,
 
         # The user's password.
         [Parameter()][securestring] $Password,
 
         # The user's authentication type.
         [Parameter()]
-        [ValidateSet('Manual','LDAP','SAML2')]
+        [ValidateSet('Manual','LDAP','SAML2','OIDC')]
         [string]$Auth,
 
-        [Parameter()][string]$UserName,
+        [Parameter()]
+        [string]$UserName,
 
         # The unique email address of the user.
-        [Parameter()][string]$Email,
+        [Parameter()]
+        [string]$Email,
         
         # The user's first name.
-        [Parameter()][string]$FirstName,
+        [Parameter()]
+        [string]$FirstName,
         
         # The user's family name.
-        [Parameter()][string]$LastName,
+        [Parameter()]
+        [string]$LastName,
 
         # The external "ID Number" of the user.
-        [Parameter()][string] $IdNumber,
+        [Parameter()]
+        [string] $IdNumber,
 
         # True if the user should be suspended.
-        [Parameter()][bool] $Suspended
+        [Parameter()]
+        [bool] $Suspended
     )
 
     Begin {
