@@ -23,6 +23,7 @@ function Get-MoodleGroupMember {
     [CmdletBinding(DefaultParameterSetName='id')]
     param (
         [Parameter(ParameterSetName="id",Mandatory,Position=0)]
+        [Alias('GroupId')]
         [int] $Id,
 
         [Parameter(ParameterSetName="pipeline", ValueFromPipeline)]
@@ -43,7 +44,7 @@ function Get-MoodleGroupMember {
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
-        if ($Groupt) {
+        if ($Group) {
             $Id = $Group.Id
         }
         $path += "&groupids[0]=$Id"
