@@ -93,7 +93,6 @@ function Remove-MoodleGroupMember {
             $target = "Group #$GroupId"
         }
         
-        Write-Verbose $i
         if ($PSCmdlet.ShouldProcess($target, "Processing $i members")) {
             $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
             if ($result.errorcode) {
