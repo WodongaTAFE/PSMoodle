@@ -9,6 +9,6 @@ function Disconnect-Moodle {
     [CmdletBinding()]
     param()
 
-    $PsCmdlet.SessionState.PSVariable.Remove('_MoodleUrl')
-    $PsCmdlet.SessionState.PSVariable.Remove('_MoodleToken')
+    Remove-Variable -Scope Script -Name _MoodleUrl
+    Remove-Variable -Scope Script -Name _MoodleToken
 }

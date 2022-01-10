@@ -87,8 +87,8 @@ function Set-MoodleUser {
     )
 
     Begin {
-        $Url = $PsCmdlet.SessionState.PSVariable.GetValue("_MoodleUrl")
-        $Token = $PsCmdlet.SessionState.PSVariable.GetValue("_MoodleToken")
+        $Url = $Script:_MoodleUrl
+        $Token = $Script:_MoodleToken
         
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."

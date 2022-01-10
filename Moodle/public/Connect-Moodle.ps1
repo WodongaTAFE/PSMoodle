@@ -63,9 +63,9 @@ function Connect-Moodle {
     
     if ($result.SiteName) {
         Write-Verbose "Connected to $($result.SiteName) as user $($result.UserName)."
-    
-        $PsCmdlet.SessionState.PSVariable.Set("_MoodleUrl", $Uri)
-        $PsCmdlet.SessionState.PSVariable.Set("_MoodleToken", $Token)
+
+        $Script:_MoodleUrl = $Uri
+        $Script:_MoodleToken = $Token
     } else {
         throw "Could not connect to $Uri with the given token."
     }    

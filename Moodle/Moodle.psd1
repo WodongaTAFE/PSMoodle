@@ -7,12 +7,11 @@
 #
 
 @{
-
     # Script module or binary module file associated with this manifest.
     RootModule = 'Moodle.psm1'
     
     # Version number of this module.
-    ModuleVersion = '0.13'
+    ModuleVersion = '0.14'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -118,7 +117,6 @@
     
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
-    
-    }
+}
     
     
