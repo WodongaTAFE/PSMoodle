@@ -77,4 +77,4 @@ And if you want to suspend a user with a given username you can do this:
 
     Get-MoodleUser -UserName 'mabster' | Set-MoodleUser -Suspended $true
 
-All the commands that update data support a -WhatIf parameter, so you can practice without making any changes, and they're pretty well documented so adding a -? switch to any of them will give you some help.
+All the commands that update data support a -WhatIf parameter, so you can practise without making any changes, and they're pretty well documented so adding a -? switch to any of them will give you some help.
