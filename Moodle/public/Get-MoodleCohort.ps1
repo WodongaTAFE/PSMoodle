@@ -103,7 +103,6 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='category')]
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
-        [Parameter(ParameterSetName='system')]
         [Parameter(ParameterSetName='id')]
         [ValidateSet('all', 'parents', 'self')]
         [String]$Includes = 'self'
@@ -140,8 +139,9 @@ function Get-MoodleCohort {
             }
             'system' {
                 $Level = [MoodleContext]::System
-                $InstanceId = 1
+                $ContextId = 10
                 $iterParams.Add('System', $System)
+                $includes='parents'
             }
             'user'{
                 $Level = [MoodleContext]::User
@@ -160,11 +160,21 @@ function Get-MoodleCohort {
             }
             '*' {
                 $contextLevel = $Level.ToString().ToLower()
-                $path += "&context[contextlevel]=$contextLevel&context[instanceid]=$InstanceId&includes=$Includes&limitfrom=$LimitFrom&limitnum=$LimitNum&query=$Query"
+                $path += "&context[contextlevel]=$contextLevel"
+
+                if($InstanceID -ne '') {
+                    $path += "&context[instanceid]=$InstanceId"
+                }
+
+                if($ContextID -ne '') {
+                    $path += "&context[contextid]=$ContextId"
+                }
+
+                $path += "&includes=$Includes&limitfrom=$LimitFrom&limitnum=$LimitNum&query=$Query"
                 $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
             }
         }
-
+        
         if ($results) {
             $results | Foreach-Object {
                 New-Object -TypeName MoodleCohort -Property @{
@@ -177,13 +187,13 @@ function Get-MoodleCohort {
                     Theme = $_.theme
                 } 
             }
-
-            Write-Debug "Result count $( $results.Count)"
+            
             #is there need to fetch more results
             if($All -and $results.Count -eq $LimitNum ) {
                 $iterParams.Add('LimitFrom', $LimitFrom + $LimitNum)
                 $iterParams.Add('LimitNum', $LimitNum )
                 $iterParams.Add('All', $All)
+                Write-Debug "Call for more"
                 Get-MoodleCohort @iterParams
             }
         }
