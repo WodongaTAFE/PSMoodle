@@ -42,6 +42,7 @@ Updates cohort #1's name and description.
 #>
 function Set-MoodleCohort {
     [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(DefaultParameterSetName='id-system')]
     param (
         [Parameter(Mandatory,ParameterSetName='id-system',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='id-catid',ValueFromPipelineByPropertyName)]
@@ -65,10 +66,10 @@ function Set-MoodleCohort {
         [Parameter(Mandatory,ParameterSetName='cohort-category',ValueFromPipelineByPropertyName)]
         [MoodleCourseCategory] $Category,
 
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $Name,
 
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [string] $IdNumber,
 
         [Parameter(ValueFromPipelineByPropertyName)]
