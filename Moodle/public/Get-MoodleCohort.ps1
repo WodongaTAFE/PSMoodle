@@ -97,7 +97,7 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
-        [int] $All = 25,
+        [switch] $All ,
 
         [Parameter(ParameterSetName='user')]
         [Parameter(ParameterSetName='category')]
