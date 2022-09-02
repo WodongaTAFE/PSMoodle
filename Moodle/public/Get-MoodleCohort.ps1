@@ -29,6 +29,16 @@ Query cohorts on specified [MoodleCourse].
 .PARAMETER Query
 Query cohorts with specified string.
 
+.PARAMETER LimitFrom
+Start results from this offset
+
+.PARAMETER LimitNum
+Limit numbers of results to spefied value 
+
+.PARAMETER All
+Return all results.
+
+
 .EXAMPLE
 Get-MoodleCohort -Id  1
 
