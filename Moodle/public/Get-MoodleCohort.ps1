@@ -5,8 +5,29 @@ Gets a Moodle cohort.
 .PARAMETER Id
 Specifies the unique ID of the cohort.
 
+.PARAMETER System
+Query cohorts on system context.
 
-Specifies the unique ID of the cohort.
+.PARAMETER System
+Query cohorts on system context.
+
+.PARAMETER Level
+Query cohorts on specified [MoodleContext] and.
+
+.PARAMETER InstanceID
+Query cohorts on specified [MoodleContext].
+
+.PARAMETER User
+Query cohorts on specified [MoodleUser].
+
+.PARAMETER Category
+Query cohorts on specified [MoodleCategory].
+
+.PARAMETER Course
+Query cohorts on specified [MoodleCourse].
+
+.PARAMETER Query
+Query cohorts with specified string.
 
 .EXAMPLE
 Get-MoodleCohort -Id  1
