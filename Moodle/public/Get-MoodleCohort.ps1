@@ -126,28 +126,37 @@ function Get-MoodleCohort {
     
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
+        $iterParams = @{}
 
-        switch($PsCmdlet.ParameterSetName) {
+        switch -Wildcard ($PsCmdlet.ParameterSetName) {
             'id' {
                 $path += "&cohortids[0]=$Id"
                 $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
                 Break
             }
+            'level' {
+                $iterParams.Add('InstanceId', $InstanceId)
+                $iterParams.Add('Level', $Level)
+            }
             'system' {
                 $Level = [MoodleContext]::System
                 $InstanceId = 1
+                $iterParams.Add('System', $System)
             }
             'user'{
                 $Level = [MoodleContext]::User
                 $InstanceId = $User.Id
+                $iterParams.Add('User', $User)
             }
             'category' {
                 $Level = [MoodleContext]::CourseCat
                 $InstanceId = $Category.Id
+                $iterParams.Add('Category', $Category)
             } 
             'course' {
                 $Level = [MoodleContext]::Course
                 $InstanceId = $Course.Id
+                $iterParams.Add('Course', $Course)
             }
             '*' {
                 $contextLevel = $Level.ToString().ToLower()
@@ -155,8 +164,6 @@ function Get-MoodleCohort {
                 $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
             }
         }
-        
-        
 
         if ($results) {
             $results | Foreach-Object {
@@ -169,6 +176,14 @@ function Get-MoodleCohort {
                     Visible = $_.visible
                     Theme = $_.theme
                 } 
+            }
+
+            #is there need to fetch more results
+            if($All -and $results.Count -eq $LimitNum ) {
+                $iterParams.Add('LimitFrom', $LimitFrom + $LimitNum)
+                $iterParams.Add('LimitNum', $LimitNum)
+                $iterParams.Add('All', $All)
+                Get-MoodleCohort @iterParams
             }
         }
     }
