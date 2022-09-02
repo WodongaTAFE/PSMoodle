@@ -108,7 +108,7 @@ function Get-MoodleCohort {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
 
-        if ($PSBoundParameters.ContainsKey('id')) {
+        if ($PsCmdlet.ParameterSetName -eq 'id') {
             $function = 'core_cohort_get_cohorts'
         } else {
             $function = 'core_cohort_search_cohorts'
@@ -118,34 +118,33 @@ function Get-MoodleCohort {
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
-        if ($PSBoundParameters.ContainsKey('id')) {
-            $path += "&cohortids[0]=$Id"
-
-            $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
-        }
-        else {
-            if ($System) {
+        switch($PsCmdlet.ParameterSetName) {
+            'id' {
+                $path += "&cohortids[0]=$Id"
+                $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+            }
+            'system' {
                 $Level = [MoodleContext]::System
                 $InstanceId = 1
             }
-            elseif ($User) {
+            'user'{
                 $Level = [MoodleContext]::User
                 $InstanceId = $User.Id
             }
-            elseif ($Category) {
+            'category' {
                 $Level = [MoodleContext]::CourseCat
                 $InstanceId = $Category.Id
             } 
-            elseif ($Course) {
+            'course' {
                 $Level = [MoodleContext]::Course
                 $InstanceId = $Course.Id
             }
-
+        }
             $contextLevel = $Level.ToString().ToLower()
             $path += "&context[contextlevel]=$contextLevel&context[instanceid]=$InstanceId&includes=self&query=$Query"
 
             $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
-        }
+        
 
         if ($results) {
             $results | Foreach-Object {
