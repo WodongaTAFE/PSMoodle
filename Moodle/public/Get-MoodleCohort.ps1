@@ -140,10 +140,11 @@ function Get-MoodleCohort {
                 $InstanceId = $Course.Id
             }
         }
-            $contextLevel = $Level.ToString().ToLower()
-            $path += "&context[contextlevel]=$contextLevel&context[instanceid]=$InstanceId&includes=self&query=$Query"
+        
+        $contextLevel = $Level.ToString().ToLower()
+        $path += "&context[contextlevel]=$contextLevel&context[instanceid]=$InstanceId&includes=self&query=$Query"
 
-            $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
+        $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
         
 
         if ($results) {
