@@ -38,6 +38,9 @@ Limit numbers of results to spefied value
 .PARAMETER All
 Return all results.
 
+.PARAMETER Includes 
+What other contexts to fetch the frameworks from. (all, parents, self)
+
 
 .EXAMPLE
 Get-MoodleCohort -Id  1
@@ -94,10 +97,16 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
-        [int] $All = 25
-        
-        
-        
+        [int] $All = 25,
+
+        [Parameter(ParameterSetName='user')]
+        [Parameter(ParameterSetName='category')]
+        [Parameter(ParameterSetName='course')]
+        [Parameter(ParameterSetName='level')]
+        [Parameter(ParameterSetName='system')]
+        [Parameter(ParameterSetName='id')]
+        [ValidateSet('all', 'parents', 'self')]
+        [String]$Includes = 'self'
     )
     
     Begin {
@@ -122,6 +131,7 @@ function Get-MoodleCohort {
             'id' {
                 $path += "&cohortids[0]=$Id"
                 $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+                Break
             }
             'system' {
                 $Level = [MoodleContext]::System
@@ -139,12 +149,13 @@ function Get-MoodleCohort {
                 $Level = [MoodleContext]::Course
                 $InstanceId = $Course.Id
             }
+            '*' {
+                $contextLevel = $Level.ToString().ToLower()
+                $path += "&context[contextlevel]=$contextLevel&context[instanceid]=$InstanceId&includes=$Includes&query=$Query"
+                $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
+            }
         }
         
-        $contextLevel = $Level.ToString().ToLower()
-        $path += "&context[contextlevel]=$contextLevel&context[instanceid]=$InstanceId&includes=self&query=$Query"
-
-        $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
         
 
         if ($results) {
