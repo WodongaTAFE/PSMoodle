@@ -116,7 +116,7 @@ function Get-MoodleCohort {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
 
-        if ($PsCmdlet.ParameterSetName -eq 'id') {
+        if ($PSBoundParameters.ContainsKey('id')) {
             $function = 'core_cohort_get_cohorts'
         } else {
             $function = 'core_cohort_search_cohorts'
@@ -167,7 +167,7 @@ function Get-MoodleCohort {
                     $path += "&context[instanceid]=$InstanceId"
                 }
 
-                if($ContextID -ne '') {
+                if($ContextID) {
                     $path += "&context[contextid]=$ContextId"
                 }
 
