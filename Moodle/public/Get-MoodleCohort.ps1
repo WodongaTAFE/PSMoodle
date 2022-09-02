@@ -171,6 +171,7 @@ function Get-MoodleCohort {
                 }
 
                 $path += "&includes=$Includes&limitfrom=$LimitFrom&limitnum=$LimitNum&query=$Query"
+                Write-debug "Requestpath: $($path -replace 'wstoken=(.*)&','wstoken=[hidden]&')"
                 $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
             }
         }
