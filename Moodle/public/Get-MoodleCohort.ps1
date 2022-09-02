@@ -5,6 +5,9 @@ Gets a Moodle cohort.
 .PARAMETER Id
 Specifies the unique ID of the cohort.
 
+
+Specifies the unique ID of the cohort.
+
 .EXAMPLE
 Get-MoodleCohort -Id  1
 
@@ -39,7 +42,31 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
-        [string] $Query = ''
+        [string] $Query = '',
+
+        [Parameter(ParameterSetName='user')]
+        [Parameter(ParameterSetName='category')]
+        [Parameter(ParameterSetName='course')]
+        [Parameter(ParameterSetName='level')]
+        [Parameter(ParameterSetName='system')]
+        [int] $LimitFrom = 0,
+        
+        [Parameter(ParameterSetName='user')]
+        [Parameter(ParameterSetName='category')]
+        [Parameter(ParameterSetName='course')]
+        [Parameter(ParameterSetName='level')]
+        [Parameter(ParameterSetName='system')]
+        [int] $LimitNum = 25,
+
+        [Parameter(ParameterSetName='user')]
+        [Parameter(ParameterSetName='category')]
+        [Parameter(ParameterSetName='course')]
+        [Parameter(ParameterSetName='level')]
+        [Parameter(ParameterSetName='system')]
+        [int] $All = 25
+        
+        
+        
     )
     
     Begin {
