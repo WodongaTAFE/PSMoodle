@@ -42,6 +42,7 @@ Updates cohort #1's name and description.
 #>
 function Set-MoodleCohort {
     [CmdletBinding(SupportsShouldProcess)]
+
     param (
         [Parameter(Mandatory,ParameterSetName='id-system',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='id-catid',ValueFromPipelineByPropertyName)]
@@ -64,11 +65,21 @@ function Set-MoodleCohort {
         [Parameter(Mandatory,ParameterSetName='id-category',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='cohort-category',ValueFromPipelineByPropertyName)]
         [MoodleCourseCategory] $Category,
-
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        
+        [Parameter(Mandatory,ParameterSetName='id-system',ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ParameterSetName='id-catid',ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ParameterSetName='id-category',ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='cohort-system',ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='cohort-category',ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='cohort-catid',ValueFromPipelineByPropertyName)]
         [string] $Name,
 
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ParameterSetName='id-system',ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ParameterSetName='id-catid',ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ParameterSetName='id-category',ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='cohort-system',ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='cohort-category',ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName='cohort-catid',ValueFromPipelineByPropertyName)]
         [string] $IdNumber,
 
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -117,6 +128,18 @@ function Set-MoodleCohort {
         foreach ($key in $params.Keys) {
             if ($PSBoundParameters.ContainsKey($key)) {
                 $body["cohorts[0][$key]"] = $params[$key]
+            } elseif ($PSBoundParameters.ContainsKey('Cohort')){
+                Switch ($key){
+                    'descriptionformat' {
+                        $body["cohorts[0][$key]"] = [int]$Cohort.$key
+                    }
+                    'visible' {
+                        $body["cohorts[0][$key]"] = if ($Cohort.$key) { 1 } else { 0 }
+                    }
+                    'default' {
+                        $body["cohorts[0][$key]"] = $Cohort.$key
+                    }    
+                }
             }
         }
 
