@@ -27,18 +27,19 @@ function Get-MoodleEnrolledUser {
         # The course to return enrolled users for.
         [Parameter(ParameterSetName="pipeline", ValueFromPipeline)][MoodleCourse]$Course
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
 
         $function = 'core_enrol_get_enrolled_users'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
@@ -47,15 +48,15 @@ function Get-MoodleEnrolledUser {
         }
         $path = $path + "&courseid=$($CourseId)&options[0][name]=userfields&options[0][value]=id,username,firstname,lastname,email"
 
-        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
         $results | Foreach-Object {
             New-Object -TypeName MoodleUser -Property @{
-                Id=$_.id 
+                Id=$_.id
                 UserName = $_.username
                 FirstName = $_.firstname
                 LastName = $_.lastname
                 Email = $_.email
-            } 
+            }
         }
     }
 }

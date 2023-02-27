@@ -28,18 +28,19 @@ function Get-MoodleCohortMember {
         [Parameter(ParameterSetName="pipeline", ValueFromPipeline)]
         [MoodleCohort] $Cohort
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
 
         $function = 'core_cohort_get_cohort_members'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
@@ -48,6 +49,6 @@ function Get-MoodleCohortMember {
         }
         $path += "&cohortids[0]=$Id"
 
-        (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).userids
+        (Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings).userids
     }
 }

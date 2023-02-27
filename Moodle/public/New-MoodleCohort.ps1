@@ -30,7 +30,7 @@ Specifies the theme of the new cohort.
 Specifies a free-text ID Number for the new cohort.
 
 .EXAMPLE
-New-MoodleCohort -System -Name "Teachers' Pets" -Description 'Our favourite students.' 
+New-MoodleCohort -System -Name "Teachers' Pets" -Description 'Our favourite students.'
 
 Creates a new system-level cohort.
 #>
@@ -68,7 +68,8 @@ function New-MoodleCohort {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -88,7 +89,7 @@ function New-MoodleCohort {
         if ($System) {
             $body['cohorts[0][categorytype][type]'] = 'system'
             $body['cohorts[0][categorytype][value]'] = '0'
-        } 
+        }
         else {
             if ($Category) {
                 $CategoryId = $Category.Id
@@ -99,16 +100,16 @@ function New-MoodleCohort {
         }
 
         if ($PSCmdlet.ShouldProcess($Name, "Create")) {
-            Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' | Foreach-Object { 
+            Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings | Foreach-Object {
                 New-Object -TypeName MoodleCohort -Property @{
-                    Id = $_.id 
+                    Id = $_.id
                     Name = $_.name
                     IdNumber = $_.idnumber
                     Description = $_.description
                     DescriptionFormat = $_.descriptionformat
                     Visible = $_.visible
                     Theme = $_.theme
-                } 
+                }
             }
         }
     }

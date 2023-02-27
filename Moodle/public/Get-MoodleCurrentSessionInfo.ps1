@@ -5,6 +5,7 @@ function Get-MoodleCurrentSessionInfo {
 
     $Url = $Script:_MoodleUrl
     $Token = $Script:_MoodleToken
+    $proxySettings = $Script:_MoodleProxySettings
 
     if (!$Url -or !$Token) {
         throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
@@ -13,7 +14,7 @@ function Get-MoodleCurrentSessionInfo {
     $function = 'core_webservice_get_site_info'
     $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
-    $result  = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+    $result  = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
     New-Object -TypeName MoodleSessionInfo -Property @{
         SiteName = $result.sitename
         SiteUrl = $result.siteurl

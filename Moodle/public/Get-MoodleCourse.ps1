@@ -45,21 +45,22 @@ function Get-MoodleCourse {
         # The category id.
         [Parameter(ParameterSetName="category")][int] $CategoryId
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
 
         $function = 'core_course_get_courses_by_field'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
-        
+
         $params = @{
             id = $Id
             shortname = $ShortName
@@ -78,14 +79,14 @@ function Get-MoodleCourse {
             }
         }
 
-        $result = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
-        $result.courses | Foreach-Object { 
+        $result = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
+        $result.courses | Foreach-Object {
             New-Object -TypeName MoodleCourse -Property @{
-                Id = $_.id 
+                Id = $_.id
                 ShortName = $_.shortname
                 FullName = $_.fullname
                 CategoryId = $_.categoryid
-                IdNumber = $_.idnumber 
+                IdNumber = $_.idnumber
                 Visible = if ($_.visible) { $true } else {$false }
             }
         }

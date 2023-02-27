@@ -33,12 +33,12 @@ Query cohorts with specified string.
 Start results from this offset
 
 .PARAMETER LimitNum
-Limit numbers of results to spefied value 
+Limit numbers of results to spefied value
 
 .PARAMETER All
 Return all results.
 
-.PARAMETER Includes 
+.PARAMETER Includes
 What other contexts to fetch the frameworks from. (all, parents, self)
 
 
@@ -84,7 +84,7 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
         [int] $LimitFrom = 0,
-        
+
         [Parameter(ParameterSetName='user')]
         [Parameter(ParameterSetName='category')]
         [Parameter(ParameterSetName='course')]
@@ -107,11 +107,12 @@ function Get-MoodleCohort {
         [ValidateSet('all', 'parents', 'self')]
         [String]$Includes = 'self'
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
@@ -122,7 +123,7 @@ function Get-MoodleCohort {
             $function = 'core_cohort_search_cohorts'
         }
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
         $iterParams = @{}
@@ -131,7 +132,7 @@ function Get-MoodleCohort {
             'id' {
                 $path += "&cohortids[0]=$Id"
                 Write-debug "Request path: $($path -replace 'wstoken=(.*?)&','wstoken=[hidden]&')"
-                $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+                $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
                 Break
             }
             'level' {
@@ -153,7 +154,7 @@ function Get-MoodleCohort {
                 $Level = [MoodleContext]::CourseCat
                 $InstanceId = $Category.Id
                 $iterParams.Add('Category', $Category)
-            } 
+            }
             'course' {
                 $Level = [MoodleContext]::Course
                 $InstanceId = $Course.Id
@@ -173,24 +174,24 @@ function Get-MoodleCohort {
 
                 $path += "&includes=$Includes&limitfrom=$LimitFrom&limitnum=$LimitNum&query=$Query"
                 Write-debug "Request path: $($path -replace 'wstoken=(.*?)&','wstoken=[hidden]&')"
-                $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
+                $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings).cohorts
             }
         }
-        
-        
+
+
         if ($results) {
             $results | Foreach-Object {
                 New-Object -TypeName MoodleCohort -Property @{
-                    Id = $_.id 
+                    Id = $_.id
                     Name = $_.name
                     IdNumber = $_.idnumber
                     Description = $_.description
                     DescriptionFormat = $_.descriptionformat
                     Visible = $_.visible
                     Theme = $_.theme
-                } 
+                }
             }
-            
+
             #is there need to fetch more results
             if($All -and $results.Count -eq $LimitNum ) {
                 $iterParams.Add('LimitFrom', $LimitFrom + $LimitNum)

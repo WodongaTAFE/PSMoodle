@@ -33,14 +33,14 @@ function New-MoodleCourseCategory {
     param (
         [Parameter(Mandatory)]
         [string] $Name,
-        
+
         [string] $Description,
         [MoodleDescriptionFormat] $DescriptionFormat = [MoodleDescriptionFormat]::HTML,
-        
+
         [Parameter(Mandatory,ValueFromPipeline,ParameterSetName='parent')]
         [MoodleCourseCategory]
         $Parent,
-        
+
         [Parameter(ParameterSetName='parentid')]
         [int]
         $ParentId = 0,
@@ -53,7 +53,8 @@ function New-MoodleCourseCategory {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -77,7 +78,7 @@ function New-MoodleCourseCategory {
         }
 
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {
-            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
 
             if ($results) {
                 if ($results.errorcode) {
@@ -85,9 +86,9 @@ function New-MoodleCourseCategory {
                     return
                 }
 
-                $results | Foreach-Object { 
+                $results | Foreach-Object {
                     New-Object -TypeName MoodleCourseCategory -Property @{
-                        Id=$_.id 
+                        Id=$_.id
                         Name=$_.name
                         # that's all we get from the web service - populate the rest from the params
                         IdNumber = $IdNumber
@@ -95,7 +96,7 @@ function New-MoodleCourseCategory {
                         DescriptionFormat = $Descriptionformat
                         Parent=$ParentId
                         Visible = $true
-                    } 
+                    }
                 }
             }
         }

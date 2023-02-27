@@ -27,18 +27,19 @@ function Get-MoodleUserCourse {
         # The user to return courses for.
         [Parameter(ParameterSetName="pipeline", ValueFromPipeline)][MoodleUser]$User
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
 
         $function = 'core_enrol_get_users_courses'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
@@ -47,14 +48,14 @@ function Get-MoodleUserCourse {
         }
         $path = $path + "&userid=$UserId"
 
-        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) 
-        $results | Foreach-Object { 
+        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
+        $results | Foreach-Object {
             New-Object -TypeName MoodleCourse -Property @{
-                Id = $_.id 
+                Id = $_.id
                 ShortName = $_.shortname
                 FullName = $_.fullname
                 CategoryId = $_.category
-                IdNumber = $_.idnumber 
+                IdNumber = $_.idnumber
                 Visible = if ($_.visible) { $true } else {$false }
             }
         }

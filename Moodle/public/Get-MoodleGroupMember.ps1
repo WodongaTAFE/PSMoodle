@@ -29,18 +29,19 @@ function Get-MoodleGroupMember {
         [Parameter(ParameterSetName="pipeline", ValueFromPipeline)]
         [MoodleGroup] $Group
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
 
         $function = 'core_group_get_group_members'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
@@ -49,6 +50,6 @@ function Get-MoodleGroupMember {
         }
         $path += "&groupids[0]=$Id"
 
-        (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).userids
+        (Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings).userids
     }
 }

@@ -25,7 +25,7 @@ Get-MoodleUser -UserName jbloggs | Remove-MoodleEnrolment -CourseId 1
 Unenrols a user with user name 'jbloggs' from course #1.
 
 .EXAMPLE
-Get-MoodleCourse -ShortName NET101 | Remove-MoodleEnrolment -User 1 
+Get-MoodleCourse -ShortName NET101 | Remove-MoodleEnrolment -User 1
 
 Unenrols user #1 from a course with short name 'NET101'.
 #>
@@ -58,7 +58,8 @@ function Remove-MoodleEnrolment {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -69,7 +70,7 @@ function Remove-MoodleEnrolment {
         $body = @{}
         $i = 0
     }
-    
+
     Process {
         if ($User) {
             $UserId = $User.Id
@@ -91,7 +92,7 @@ function Remove-MoodleEnrolment {
         }
 
         if ($PSCmdlet.ShouldProcess($target, "Processing $i unenrolments")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

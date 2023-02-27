@@ -22,11 +22,12 @@ function Get-MoodleGroup {
         [Parameter(Mandatory, ParameterSetName='courseid', ValueFromPipeline)]
         [int] $CourseId
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
@@ -37,14 +38,14 @@ function Get-MoodleGroup {
             $function = 'core_group_get_course_groups'
         }
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
 
         if ($PSBoundParameters.ContainsKey('id')) {
             $path += "&groupids[0]=$Id"
 
-            $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+            $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
         }
         else {
             if ($Course) {
@@ -53,7 +54,7 @@ function Get-MoodleGroup {
 
             $path += "&courseid=$CourseId"
 
-            $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path)))
+            $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings)
         }
 
         if ($results) {
@@ -67,14 +68,14 @@ function Get-MoodleGroup {
 
             $results | Foreach-Object {
                 New-Object -TypeName MoodleGroup -Property @{
-                    Id=$_.id 
-                    CourseId=$_.courseid 
+                    Id=$_.id
+                    CourseId=$_.courseid
                     Name=$_.name
                     IdNumber = $_.idnumber
                     Description = $_.description
                     DescriptionFormat = $_.descriptionformat
                     EnrolmentKey = $_.enrolmentkey
-                } 
+                }
             }
         }
     }

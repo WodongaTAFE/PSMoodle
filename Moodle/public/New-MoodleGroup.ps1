@@ -59,7 +59,8 @@ function New-MoodleGroup {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -83,23 +84,23 @@ function New-MoodleGroup {
         }
 
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {
-            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
 
             if ($results) {
                 if ($results.errorcode) {
                     Write-Error $results.message
                 }
 
-                $results | Foreach-Object { 
+                $results | Foreach-Object {
                     New-Object -TypeName MoodleGroup -Property @{
-                        Id=$_.id 
-                        CourseId=$_.courseid 
+                        Id=$_.id
+                        CourseId=$_.courseid
                         Name=$_.name
                         IdNumber = $_.idnumber
                         Description = $_.description
                         DescriptionFormat = $_.descriptionformat
                         EnrolmentKey = $_.enrolmentkey
-                    } 
+                    }
                 }
             }
         }
