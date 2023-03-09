@@ -33,12 +33,12 @@ Query cohorts with specified string.
 Start results from this offset
 
 .PARAMETER LimitNum
-Limit numbers of results to spefied value 
+Limit numbers of results to spefied value
 
 .PARAMETER All
 Return all results.
 
-.PARAMETER Includes 
+.PARAMETER Includes
 What other contexts to fetch the frameworks from. (all, parents, self)
 
 
@@ -55,6 +55,9 @@ function Get-MoodleCohort {
 
         [Parameter(Mandatory, ParameterSetName='system')]
         [switch] $System,
+
+        [Parameter(Mandatory, ParameterSetName='global')]
+        [switch] $Global,
 
         [Parameter(Mandatory, ParameterSetName='level')]
         [MoodleContext] $Level,
@@ -76,6 +79,7 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
+        [Parameter(ParameterSetName='global')]
         [string] $Query = '',
 
         [Parameter(ParameterSetName='user')]
@@ -83,13 +87,15 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
+        [Parameter(ParameterSetName='global')]
         [int] $LimitFrom = 0,
-        
+
         [Parameter(ParameterSetName='user')]
         [Parameter(ParameterSetName='category')]
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
+        [Parameter(ParameterSetName='global')]
         [int]$LimitNum = 25,
 
         [Parameter(ParameterSetName='user')]
@@ -97,6 +103,7 @@ function Get-MoodleCohort {
         [Parameter(ParameterSetName='course')]
         [Parameter(ParameterSetName='level')]
         [Parameter(ParameterSetName='system')]
+        [Parameter(ParameterSetName='global')]
         [switch]$All ,
 
         [Parameter(ParameterSetName='user')]
@@ -107,11 +114,11 @@ function Get-MoodleCohort {
         [ValidateSet('all', 'parents', 'self')]
         [String]$Includes = 'self'
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+
         if (!$Url -or !$Token) {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
@@ -122,7 +129,7 @@ function Get-MoodleCohort {
             $function = 'core_cohort_search_cohorts'
         }
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
         $iterParams = @{}
@@ -142,7 +149,13 @@ function Get-MoodleCohort {
                 $Level = [MoodleContext]::System
                 $ContextId = 10
                 $iterParams.Add('System', $System)
-                $includes='parents'
+                $includes = 'parents'
+            }
+            'global' {
+                $Level = [MoodleContext]::System
+                $ContextId = 10
+                $iterParams.Add('System', $System)
+                $includes = 'all'
             }
             'user'{
                 $Level = [MoodleContext]::User
@@ -153,7 +166,7 @@ function Get-MoodleCohort {
                 $Level = [MoodleContext]::CourseCat
                 $InstanceId = $Category.Id
                 $iterParams.Add('Category', $Category)
-            } 
+            }
             'course' {
                 $Level = [MoodleContext]::Course
                 $InstanceId = $Course.Id
@@ -176,21 +189,21 @@ function Get-MoodleCohort {
                 $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
             }
         }
-        
-        
+
+
         if ($results) {
             $results | Foreach-Object {
                 New-Object -TypeName MoodleCohort -Property @{
-                    Id = $_.id 
+                    Id = $_.id
                     Name = $_.name
                     IdNumber = $_.idnumber
                     Description = $_.description
                     DescriptionFormat = $_.descriptionformat
                     Visible = $_.visible
                     Theme = $_.theme
-                } 
+                }
             }
-            
+
             #is there need to fetch more results
             if($All -and $results.Count -eq $LimitNum ) {
                 $iterParams.Add('LimitFrom', $LimitFrom + $LimitNum)
