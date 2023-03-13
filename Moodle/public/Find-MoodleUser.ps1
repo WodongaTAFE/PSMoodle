@@ -27,21 +27,21 @@ Specifies the firstname of a user to find. Use '%' as wildcard character.
 Specifies the authentication method of users to find.
 
 .EXAMPLE
-Find-MoodleUsers -UserName teacher
+Find-MoodleUser -UserName teacher
 
 Gets a user whose user name is 'teacher'.
 
 .EXAMPLE
-Find-MoodleUsers -Auth manual
+Find-MoodleUser -Auth manual
 
 Finds all users whose auth method is 'manual'.
 
 .EXAMPLE
-Find-MoodleUsers -Email '%@example.com'
+Find-MoodleUser -Email '%@example.com'
 
 Finds all users whose email ends in '@example.com'.
 #>
-function Find-MoodleUsers {
+function Find-MoodleUser {
     # [OutputType([MoodleUserDetails])]
     [CmdletBinding()]
     param (
