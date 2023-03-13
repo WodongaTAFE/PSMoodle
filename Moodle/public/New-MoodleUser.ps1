@@ -90,7 +90,7 @@ function New-MoodleUser {
         if ($GeneratePassword) {
             $body['users[0][createpassword]'] = 1
 
-        } else {
+        } elseif (!$NoPassword) {
             $marshal = [Runtime.InteropServices.Marshal]
             $pass = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
             $body['users[0][password]'] = $pass
