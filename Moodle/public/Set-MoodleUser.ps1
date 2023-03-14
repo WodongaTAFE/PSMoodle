@@ -59,7 +59,7 @@ function Set-MoodleUser {
 
         # The user's authentication type.
         [Parameter()]
-        [ValidateSet('Manual','LDAP','SAML2','OIDC')]
+        [ValidateSet('Manual','LDAP','SAML2','OIDC', 'OAUTH2')]
         [string]$Auth,
 
         [Parameter()]

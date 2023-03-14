@@ -42,19 +42,22 @@ function New-MoodleUser {
         # Generate a password and email it to the new user.
         [Parameter(Mandatory,ParameterSetName='generatedpassword')][switch][bool] $GeneratePassword,
 
+        # Don't set a password, for use with external identity providers.
+        [Parameter(Mandatory,ParameterSetName='nopassword')][switch][bool] $NoPassword,
+
         # The user's authentication type.
         [Parameter(Mandatory)]
-        [ValidateSet('Manual','LDAP','SAML2','OIDC')]
+        [ValidateSet('Manual','LDAP','SAML2','OIDC', 'OAUTH2')]
         [string]$Auth,
 
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$UserName,
 
         # The unique email address of the user.
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$Email,
-        
+
         # The user's first name.
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$FirstName,
-        
+
         # The user's family name.
         [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$LastName,
 
@@ -65,7 +68,7 @@ function New-MoodleUser {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -87,24 +90,24 @@ function New-MoodleUser {
         if ($GeneratePassword) {
             $body['users[0][createpassword]'] = 1
 
-        } else {
+        } elseif (!$NoPassword) {
             $marshal = [Runtime.InteropServices.Marshal]
             $pass = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
             $body['users[0][password]'] = $pass
         }
 
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {
-            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
-            $results | Foreach-Object { 
+            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded'
+            $results | Foreach-Object {
                 New-Object -TypeName MoodleUserDetails -Property @{
-                    Id=$_.id 
+                    Id=$_.id
                     UserName=$UserName
                     Auth=$Auth
                     FirstName=$FirstName
                     LastName=$LastName
                     Email=$Email
-                    IdNumber=$IdNumber 
-                } 
+                    IdNumber=$IdNumber
+                }
             }
         }
     }
