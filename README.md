@@ -15,7 +15,7 @@ The first thing you'll need to do is connect to a Moodle instance. We do this wi
 
 To have PowerShell ask for a username and password and then connect with those credentials:
 
-    Connect-Moodle -Uri 'https://sandbox.moodledemo.net' -Credential (Get-Credential)	
+    Connect-Moodle -Uri 'https://sandbox.moodledemo.net' -Credential (Get-Credential)
 
 To use an existing Moodle API token:
 
@@ -36,10 +36,12 @@ Note that no network connections are maintained that need to be cleaned up with 
 Once you're connected, you have a bunch of commands you can use to query and/or update the connected Moodle instance:
 
 * Add-MoodleCohortMember
+* Add-MoodleUserRole
 * Connect-Moodle
 * Copy-MoodleCourse
 * Disconnect-Moodle
 * Find-MoodleCourse
+* Find-MoodleUser
 * Get-MoodleCohort
 * Get-MoodleCohortMember
 * Get-MoodleCourse
@@ -60,6 +62,7 @@ Once you're connected, you have a bunch of commands you can use to query and/or 
 * Remove-MoodleCourseCategory
 * Remove-MoodleEnrolment
 * Remove-MoodleGroup
+* Remove-MoodleUserRole
 * Set-MoodleCohort
 * Set-MoodleCourseCategory
 * Set-MoodleGroup
