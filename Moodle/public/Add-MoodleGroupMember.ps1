@@ -25,7 +25,7 @@ Get-MoodleUser -UserName jbloggs | Add-MoodleGroupMember -GroupId 1
 Adds a user with user name 'jbloggs' to group #1.
 
 .EXAMPLE
-Get-MoodleGroup -Id 1 | Add-MoodleGroupMember -User 1 
+Get-MoodleGroup -Id 1 | Add-MoodleGroupMember -User 1
 
 Adds user #1 to group #1.
 #>
@@ -56,7 +56,8 @@ function Add-MoodleGroupMember {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -67,7 +68,7 @@ function Add-MoodleGroupMember {
         $body = @{}
         $i = 0
     }
-    
+
     Process {
         if ($User) {
             $UserId = $User.Id
@@ -92,9 +93,9 @@ function Add-MoodleGroupMember {
         } else {
             $target = "Group #$GroupId"
         }
-        
+
         if ($PSCmdlet.ShouldProcess($target, "Processing $i members")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

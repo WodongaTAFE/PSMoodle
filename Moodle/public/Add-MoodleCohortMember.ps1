@@ -25,7 +25,7 @@ Get-MoodleUser -UserName jbloggs | Add-MoodleCohortMember -CohortId 1
 Adds a user with user name 'jbloggs' to cohort #1.
 
 .EXAMPLE
-Get-MoodleCohort -Id 1 | Add-MoodleCohortMember -User 1 
+Get-MoodleCohort -Id 1 | Add-MoodleCohortMember -User 1
 
 Adds user #1 to cohort #1.
 #>
@@ -56,7 +56,8 @@ function Add-MoodleCohortMember {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -67,7 +68,7 @@ function Add-MoodleCohortMember {
         $body = @{}
         $i = 0
     }
-    
+
     Process {
         if ($User) {
             $UserId = $User.Id
@@ -94,10 +95,10 @@ function Add-MoodleCohortMember {
         } else {
             $target = "Cohort #$CohortId"
         }
-        
+
         Write-Verbose $i
         if ($PSCmdlet.ShouldProcess($target, "Processing $i members")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

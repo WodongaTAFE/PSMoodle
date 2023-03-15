@@ -11,4 +11,5 @@ function Disconnect-Moodle {
 
     Remove-Variable -Scope Script -Name _MoodleUrl
     Remove-Variable -Scope Script -Name _MoodleToken
+    Remove-Variable -Scope Script -Name _MoodleProxySettings
 }

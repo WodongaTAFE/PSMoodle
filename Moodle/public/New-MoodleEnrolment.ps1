@@ -64,7 +64,8 @@ function New-MoodleEnrolment {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -75,7 +76,7 @@ function New-MoodleEnrolment {
         $body = @{}
         $i = 0
     }
-    
+
     Process {
         if ($User) {
             $UserId = $User.Id
@@ -118,10 +119,10 @@ function New-MoodleEnrolment {
         } else {
             $target = "Course #$CourseId"
         }
-        
+
         Write-Verbose $i
         if ($PSCmdlet.ShouldProcess($target, "Processing $i enrolments")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

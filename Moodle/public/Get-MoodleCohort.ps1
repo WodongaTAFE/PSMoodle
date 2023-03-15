@@ -48,69 +48,69 @@ Get-MoodleCohort -Id  1
 Gets a cohort whose ID is 1.
 #>
 function Get-MoodleCohort {
-    [CmdletBinding(DefaultParameterSetName='id')]
+    [CmdletBinding(DefaultParameterSetName = 'id')]
     param (
-        [Parameter(Mandatory, Position=0, ParameterSetName='id')]
+        [Parameter(Mandatory, Position = 0, ParameterSetName = 'id')]
         [int] $Id,
 
-        [Parameter(Mandatory, ParameterSetName='system')]
+        [Parameter(Mandatory, ParameterSetName = 'system')]
         [switch] $System,
 
-        [Parameter(Mandatory, ParameterSetName='global')]
+        [Parameter(Mandatory, ParameterSetName = 'global')]
         [switch] $Global,
 
-        [Parameter(Mandatory, ParameterSetName='level')]
+        [Parameter(Mandatory, ParameterSetName = 'level')]
         [MoodleContext] $Level,
 
-        [Parameter(Mandatory, ParameterSetName='level')]
+        [Parameter(Mandatory, ParameterSetName = 'level')]
         [string] $InstanceId,
 
-        [Parameter(ParameterSetName='user', ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'user', ValueFromPipeline)]
         [MoodleUser] $User,
 
-        [Parameter(ParameterSetName='category', ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'category', ValueFromPipeline)]
         [MoodleCourseCategory] $Category,
 
-        [Parameter(ParameterSetName='course', ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'course', ValueFromPipeline)]
         [MoodleCourse] $Course,
 
-        [Parameter(ParameterSetName='user')]
-        [Parameter(ParameterSetName='category')]
-        [Parameter(ParameterSetName='course')]
-        [Parameter(ParameterSetName='level')]
-        [Parameter(ParameterSetName='system')]
-        [Parameter(ParameterSetName='global')]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'category')]
+        [Parameter(ParameterSetName = 'course')]
+        [Parameter(ParameterSetName = 'level')]
+        [Parameter(ParameterSetName = 'system')]
+        [Parameter(ParameterSetName = 'global')]
         [string] $Query = '',
 
-        [Parameter(ParameterSetName='user')]
-        [Parameter(ParameterSetName='category')]
-        [Parameter(ParameterSetName='course')]
-        [Parameter(ParameterSetName='level')]
-        [Parameter(ParameterSetName='system')]
-        [Parameter(ParameterSetName='global')]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'category')]
+        [Parameter(ParameterSetName = 'course')]
+        [Parameter(ParameterSetName = 'level')]
+        [Parameter(ParameterSetName = 'system')]
+        [Parameter(ParameterSetName = 'global')]
         [int] $LimitFrom = 0,
 
-        [Parameter(ParameterSetName='user')]
-        [Parameter(ParameterSetName='category')]
-        [Parameter(ParameterSetName='course')]
-        [Parameter(ParameterSetName='level')]
-        [Parameter(ParameterSetName='system')]
-        [Parameter(ParameterSetName='global')]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'category')]
+        [Parameter(ParameterSetName = 'course')]
+        [Parameter(ParameterSetName = 'level')]
+        [Parameter(ParameterSetName = 'system')]
+        [Parameter(ParameterSetName = 'global')]
         [int]$LimitNum = 25,
 
-        [Parameter(ParameterSetName='user')]
-        [Parameter(ParameterSetName='category')]
-        [Parameter(ParameterSetName='course')]
-        [Parameter(ParameterSetName='level')]
-        [Parameter(ParameterSetName='system')]
-        [Parameter(ParameterSetName='global')]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'category')]
+        [Parameter(ParameterSetName = 'course')]
+        [Parameter(ParameterSetName = 'level')]
+        [Parameter(ParameterSetName = 'system')]
+        [Parameter(ParameterSetName = 'global')]
         [switch]$All ,
 
-        [Parameter(ParameterSetName='user')]
-        [Parameter(ParameterSetName='category')]
-        [Parameter(ParameterSetName='course')]
-        [Parameter(ParameterSetName='level')]
-        [Parameter(ParameterSetName='id')]
+        [Parameter(ParameterSetName = 'user')]
+        [Parameter(ParameterSetName = 'category')]
+        [Parameter(ParameterSetName = 'course')]
+        [Parameter(ParameterSetName = 'level')]
+        [Parameter(ParameterSetName = 'id')]
         [ValidateSet('all', 'parents', 'self')]
         [String]$Includes = 'self'
     )
@@ -118,6 +118,7 @@ function Get-MoodleCohort {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
+        $proxySettings = $Script:_MoodleProxySettings
 
         if (!$Url -or !$Token) {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
@@ -125,7 +126,8 @@ function Get-MoodleCohort {
 
         if ($PSBoundParameters.ContainsKey('id')) {
             $function = 'core_cohort_get_cohorts'
-        } else {
+        }
+        else {
             $function = 'core_cohort_search_cohorts'
         }
     }
@@ -138,7 +140,7 @@ function Get-MoodleCohort {
             'id' {
                 $path += "&cohortids[0]=$Id"
                 Write-debug "Request path: $($path -replace 'wstoken=(.*?)&','wstoken=[hidden]&')"
-                $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+                $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
                 Break
             }
             'level' {
@@ -157,7 +159,7 @@ function Get-MoodleCohort {
                 $iterParams.Add('System', $System)
                 $includes = 'all'
             }
-            'user'{
+            'user' {
                 $Level = [MoodleContext]::User
                 $InstanceId = $User.Id
                 $iterParams.Add('User', $User)
@@ -176,17 +178,17 @@ function Get-MoodleCohort {
                 $contextLevel = $Level.ToString().ToLower()
                 $path += "&context[contextlevel]=$contextLevel"
 
-                if($InstanceID -ne '') {
+                if ($InstanceID -ne '') {
                     $path += "&context[instanceid]=$InstanceId"
                 }
 
-                if($ContextID) {
+                if ($ContextID) {
                     $path += "&context[contextid]=$ContextId"
                 }
 
                 $path += "&includes=$Includes&limitfrom=$LimitFrom&limitnum=$LimitNum&query=$Query"
                 Write-debug "Request path: $($path -replace 'wstoken=(.*?)&','wstoken=[hidden]&')"
-                $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path))).cohorts
+                $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings).cohorts
             }
         }
 
@@ -194,18 +196,18 @@ function Get-MoodleCohort {
         if ($results) {
             $results | Foreach-Object {
                 New-Object -TypeName MoodleCohort -Property @{
-                    Id = $_.id
-                    Name = $_.name
-                    IdNumber = $_.idnumber
-                    Description = $_.description
+                    Id                = $_.id
+                    Name              = $_.name
+                    IdNumber          = $_.idnumber
+                    Description       = $_.description
                     DescriptionFormat = $_.descriptionformat
-                    Visible = $_.visible
-                    Theme = $_.theme
+                    Visible           = $_.visible
+                    Theme             = $_.theme
                 }
             }
 
             #is there need to fetch more results
-            if($All -and $results.Count -eq $LimitNum ) {
+            if ($All -and $results.Count -eq $LimitNum ) {
                 $iterParams.Add('LimitFrom', $LimitFrom + $LimitNum)
                 $iterParams.Add('LimitNum', $LimitNum )
                 $iterParams.Add('All', $All)

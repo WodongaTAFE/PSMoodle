@@ -26,22 +26,48 @@ Prompts for your username and password, then connects to the Moodle sandbox demo
 See also: Disconnect-Moodle.
 #>
 function Connect-Moodle {
-    [CmdletBinding(DefaultParameterSetName='cred')]
+    [CmdletBinding(DefaultParameterSetName = 'cred')]
     param (
         # The base URI of your Moodle instance.
-        [Parameter(Mandatory,Position=0)]
+        [Parameter(Mandatory, Position = 0)]
         [Alias('Url')]
         [uri]$Uri,
 
         # Secure login credentials for your Moodle instance.
-        [Parameter(Mandatory,Position=1,ParameterSetName='cred')]
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'cred')]
         [PSCredential] $Credential,
-        
+
         # The API token to connect to Moodle.
-        [Parameter(Mandatory,Position=1,ParameterSetName='token')]
-        [string] $Token
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'token')]
+        [string] $Token,
+
+        # The proxy address needed to reach your Moodle instance.
+        [Parameter(Position = 2)]
+        [uri]$Proxy,
+
+        # Secure credentials for your proxy server.
+        [Parameter(Position = 3)]
+        [PSCredential] $ProxyCredential,
+
+        # Use current user credentials for your proxy server.
+        [Parameter(Position = 3)]
+        [switch] $ProxyUseDefaultCredentials
     )
-    
+
+    $proxySettings = @{}
+
+    if ($Proxy) {
+        $proxySettings.Add("Proxy", $Proxy)
+        if ($ProxyCredential) {
+            $proxySettings.Add("ProxyCredential", $ProxyCredential)
+        }
+        else {
+            if ($ProxyUseDefaultCredentials) {
+                $proxySettings.Add("ProxyUseDefaultCredentials", $true)
+            }
+        }
+    }
+
     $function = 'core_webservice_get_site_info'
     if ($Credential) {
         # Extract plain text password from credential
@@ -49,7 +75,7 @@ function Connect-Moodle {
         $password = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Credential.Password) )
 
         $path = "login/token.php?service=moodle_mobile_app&username=$($Credential.UserName)&password=$password"
-        $result = Invoke-RestMethod -Uri ([uri]::new($Uri, $path))
+        $result = Invoke-RestMethod -Uri ([uri]::new($Uri, $path)) @proxySettings
 
         $Token = $result.token
         if (!$Token) {
@@ -58,15 +84,17 @@ function Connect-Moodle {
     }
 
     $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
-    
-    $result  = Invoke-RestMethod -Uri ([uri]::new($Uri, $path))
-    
+
+    $result = Invoke-RestMethod -Uri ([uri]::new($Uri, $path)) @proxySettings
+
     if ($result.SiteName) {
         Write-Verbose "Connected to $($result.SiteName) as user $($result.UserName)."
 
         $Script:_MoodleUrl = $Uri
         $Script:_MoodleToken = $Token
-    } else {
+        $Script:_MoodleProxySettings = $proxySettings
+    }
+    else {
         throw "Could not connect to $Uri with the given token."
-    }    
+    }
 }

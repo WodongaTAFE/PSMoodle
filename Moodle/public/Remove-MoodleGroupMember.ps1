@@ -25,7 +25,7 @@ Get-MoodleUser -UserName jbloggs | Remove-MoodleGroupMember -GroupId 1
 Remove a user with user name 'jbloggs' from group #1.
 
 .EXAMPLE
-Get-MoodleGroup -Id 1 | Remove-MoodleGroupMember -User 1 
+Get-MoodleGroup -Id 1 | Remove-MoodleGroupMember -User 1
 
 Remove user #1 from group #1.
 #>
@@ -56,7 +56,8 @@ function Remove-MoodleGroupMember {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -67,7 +68,7 @@ function Remove-MoodleGroupMember {
         $body = @{}
         $i = 0
     }
-    
+
     Process {
         if ($User) {
             $UserId = $User.Id
@@ -92,9 +93,9 @@ function Remove-MoodleGroupMember {
         } else {
             $target = "Group #$GroupId"
         }
-        
+
         if ($PSCmdlet.ShouldProcess($target, "Processing $i members")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

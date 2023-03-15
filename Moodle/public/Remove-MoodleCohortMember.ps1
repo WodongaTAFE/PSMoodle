@@ -25,7 +25,7 @@ Get-MoodleUser -UserName jbloggs | Remove-MoodleCohortMember -CohortId 1
 Remove a user with user name 'jbloggs' from cohort #1.
 
 .EXAMPLE
-Get-MoodleCohort -Id 1 | Remove-MoodleCohortMember -User 1 
+Get-MoodleCohort -Id 1 | Remove-MoodleCohortMember -User 1
 
 Remove user #1 from cohort #1.
 #>
@@ -56,7 +56,8 @@ function Remove-MoodleCohortMember {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -67,7 +68,7 @@ function Remove-MoodleCohortMember {
         $body = @{}
         $i = 0
     }
-    
+
     Process {
         if ($User) {
             $UserId = $User.Id
@@ -92,10 +93,10 @@ function Remove-MoodleCohortMember {
         } else {
             $target = "Cohort #$CohortId"
         }
-        
+
         Write-Verbose $i
         if ($PSCmdlet.ShouldProcess($target, "Processing $i members")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

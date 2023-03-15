@@ -37,29 +37,29 @@ function New-MoodleUser {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         # The user's password.
-        [Parameter(Mandatory,ParameterSetName='suppliedpassword')][securestring] $Password,
+        [Parameter(Mandatory, ParameterSetName = 'suppliedpassword')][securestring] $Password,
 
         # Generate a password and email it to the new user.
-        [Parameter(Mandatory,ParameterSetName='generatedpassword')][switch][bool] $GeneratePassword,
+        [Parameter(Mandatory, ParameterSetName = 'generatedpassword')][switch][bool] $GeneratePassword,
 
         # Don't set a password, for use with external identity providers.
-        [Parameter(Mandatory,ParameterSetName='nopassword')][switch][bool] $NoPassword,
+        [Parameter(Mandatory, ParameterSetName = 'nopassword')][switch][bool] $NoPassword,
 
         # The user's authentication type.
         [Parameter(Mandatory)]
-        [ValidateSet('Manual','LDAP','SAML2','OIDC', 'OAUTH2')]
+        [ValidateSet('Manual', 'LDAP', 'SAML2', 'OIDC', 'OAUTH2')]
         [string]$Auth,
 
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$UserName,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)][string]$UserName,
 
         # The unique email address of the user.
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$Email,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)][string]$Email,
 
         # The user's first name.
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$FirstName,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)][string]$FirstName,
 
         # The user's family name.
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)][string]$LastName,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)][string]$LastName,
 
         # The external "ID Number" of the user.
         [Parameter(ValueFromPipelineByPropertyName)][string] $IdNumber
@@ -68,6 +68,7 @@ function New-MoodleUser {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
+        $proxySettings = $Script:_MoodleProxySettings
 
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
@@ -79,34 +80,35 @@ function New-MoodleUser {
 
     Process {
         $body = @{
-            'users[0][username]' = $UserName
-            'users[0][auth]' = $Auth.ToLower()
+            'users[0][username]'  = $UserName
+            'users[0][auth]'      = $Auth.ToLower()
             'users[0][firstname]' = $FirstName
-            'users[0][lastname]' = $LastName
-            'users[0][email]' = $Email
-            'users[0][idnumber]' = $IdNumber
+            'users[0][lastname]'  = $LastName
+            'users[0][email]'     = $Email
+            'users[0][idnumber]'  = $IdNumber
         }
 
         if ($GeneratePassword) {
             $body['users[0][createpassword]'] = 1
 
-        } elseif (!$NoPassword) {
+        }
+        elseif (!$NoPassword) {
             $marshal = [Runtime.InteropServices.Marshal]
             $pass = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Password) )
             $body['users[0][password]'] = $pass
         }
 
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {
-            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded'
+            $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             $results | Foreach-Object {
                 New-Object -TypeName MoodleUserDetails -Property @{
-                    Id=$_.id
-                    UserName=$UserName
-                    Auth=$Auth
-                    FirstName=$FirstName
-                    LastName=$LastName
-                    Email=$Email
-                    IdNumber=$IdNumber
+                    Id        = $_.id
+                    UserName  = $UserName
+                    Auth      = $Auth
+                    FirstName = $FirstName
+                    LastName  = $LastName
+                    Email     = $Email
+                    IdNumber  = $IdNumber
                 }
             }
         }

@@ -36,7 +36,7 @@ Specifies the theme of the cohort.
 Specifies a free-text ID Number for the cohort.
 
 .EXAMPLE
-Set-MoodleCohort -Id 1 "Teachers' Pets" -Description 'Our favourite students.' 
+Set-MoodleCohort -Id 1 "Teachers' Pets" -Description 'Our favourite students.'
 
 Updates cohort #1's name and description.
 #>
@@ -65,7 +65,7 @@ function Set-MoodleCohort {
         [Parameter(Mandatory,ParameterSetName='id-category',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='cohort-category',ValueFromPipelineByPropertyName)]
         [MoodleCourseCategory] $Category,
-        
+
         [Parameter(Mandatory,ParameterSetName='id-system',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='id-catid',ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory,ParameterSetName='id-category',ValueFromPipelineByPropertyName)]
@@ -98,7 +98,8 @@ function Set-MoodleCohort {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
@@ -138,7 +139,7 @@ function Set-MoodleCohort {
                     }
                     'default' {
                         $body["cohorts[0][$key]"] = $Cohort.$key
-                    }    
+                    }
                 }
             }
         }
@@ -146,7 +147,7 @@ function Set-MoodleCohort {
         if ($System) {
             $body['cohorts[0][categorytype][type]'] = 'system'
             $body['cohorts[0][categorytype][value]'] = '0'
-        } 
+        }
         else {
             if ($Category) {
                 $CategoryId = $Category.Id
@@ -159,7 +160,7 @@ function Set-MoodleCohort {
         }
 
         if ($PSCmdlet.ShouldProcess($Id, "Update")) {
-            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' 
+            $result = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             if ($result.errorcode) {
                 Write-Error $result.message
             }

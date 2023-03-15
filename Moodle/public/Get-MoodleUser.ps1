@@ -45,6 +45,7 @@ function Get-MoodleUser {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
+        $proxySettings = $Script:_MoodleProxySettings
 
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
@@ -76,7 +77,7 @@ function Get-MoodleUser {
             }
         }
 
-        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path))
+        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
         $results | Foreach-Object {
             New-Object -TypeName MoodleUserDetails -Property @{
                 Id          = $_.id

@@ -50,14 +50,15 @@ function Get-MoodleCourseCategory {
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
 
         $function = 'core_course_get_categories'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
         $path = $path + "&addsubcategories=$(if ($Recurse) { 1 } else { 0 })"
@@ -77,8 +78,8 @@ function Get-MoodleCourseCategory {
                 $index++
             }
         }
-        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) 
-        $results | ForEach-Object { 
+        $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
+        $results | ForEach-Object {
             New-Object -TypeName MoodleCourseCategory -Property @{
                 Id = $_.id
                 Name = $_.name

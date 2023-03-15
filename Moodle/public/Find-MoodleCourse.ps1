@@ -28,21 +28,22 @@ function Find-MoodleCourse {
         [Parameter()][switch]$Enrolled,
         [Parameter()][switch]$Completion
     )
-    
+
     Begin {
         $Url = $Script:_MoodleUrl
         $Token = $Script:_MoodleToken
-        
+        $proxySettings = $Script:_MoodleProxySettings
+
         if (!$Url -or !$Token) {
             Throw "You must call the Connect-Moodle cmdlet before calling any other cmdlets."
         }
 
         $function = 'core_course_search_courses'
     }
-    
+
     Process {
         $path = "webservice/rest/server.php?wstoken=$Token&wsfunction=$function&moodlewsrestformat=json"
-        
+
         $body = @{
             criterianame = 'search'
             criteriavalue = $SearchString
@@ -50,15 +51,15 @@ function Find-MoodleCourse {
             onlywithcompletion = if ($Completion) { 1 } else { 0 }
         }
 
-        $result = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) -Method POST -Body $body -ContentType 'application/x-www-form-urlencoded' 
+        $result = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) -Method POST -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
         if ($result.courses) {
-            $result.courses | Foreach-Object { 
+            $result.courses | Foreach-Object {
                 New-Object -TypeName MoodleCourse -Property @{
-                    Id = $_.id 
+                    Id = $_.id
                     ShortName = $_.shortname
                     FullName = $_.fullname
                     CategoryId = $_.categoryid
-                    IdNumber = $_.idnumber 
+                    IdNumber = $_.idnumber
                     Visible = if ($_.visible) { $true } else {$false }
                 }
             }
