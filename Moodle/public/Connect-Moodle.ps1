@@ -50,7 +50,7 @@ function Connect-Moodle {
         [PSCredential] $ProxyCredential,
 
         # Use current user credentials for your proxy server.
-        [Parameter(Position = 3)]
+        [Parameter(Position = 4)]
         [switch] $ProxyUseDefaultCredentials
     )
 
