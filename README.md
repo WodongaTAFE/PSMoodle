@@ -42,6 +42,7 @@ Once you're connected, you have a bunch of commands you can use to query and/or 
 * Disconnect-Moodle
 * Find-MoodleCourse
 * Find-MoodleUser
+* Get-MoodleBadge
 * Get-MoodleCohort
 * Get-MoodleCohortMember
 * Get-MoodleCourse
