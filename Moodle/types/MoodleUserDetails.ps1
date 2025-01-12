@@ -1,4 +1,6 @@
 class MoodleUserDetails : MoodleUser {
+    [string]$Department
+
     [string]$IdNumber
 
     [bool]$Suspended

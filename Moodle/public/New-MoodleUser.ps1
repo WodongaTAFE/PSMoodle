@@ -23,6 +23,9 @@ Specifies the new user's first name.
 .PARAMETER LastName
 Specifies the new user's last name.
 
+.PARAMETER Department
+Specifies the user's department.
+
 .PARAMETER IdNumber
 Specifies a free-text ID Number for the new user.
 
@@ -61,6 +64,9 @@ function New-MoodleUser {
         # The user's family name.
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)][string]$LastName,
 
+        # The user's department.
+        [Parameter(ValueFromPipelineByPropertyName)][string] $Department,
+
         # The external "ID Number" of the user.
         [Parameter(ValueFromPipelineByPropertyName)][string] $IdNumber
     )
@@ -80,12 +86,13 @@ function New-MoodleUser {
 
     Process {
         $body = @{
-            'users[0][username]'  = $UserName
-            'users[0][auth]'      = $Auth.ToLower()
-            'users[0][firstname]' = $FirstName
-            'users[0][lastname]'  = $LastName
-            'users[0][email]'     = $Email
-            'users[0][idnumber]'  = $IdNumber
+            'users[0][username]'   = $UserName
+            'users[0][auth]'       = $Auth.ToLower()
+            'users[0][firstname]'  = $FirstName
+            'users[0][lastname]'   = $LastName
+            'users[0][email]'      = $Email
+            'users[0][department]' = $Department
+            'users[0][idnumber]'   = $IdNumber
         }
 
         if ($GeneratePassword) {
@@ -102,13 +109,14 @@ function New-MoodleUser {
             $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             $results | Foreach-Object {
                 New-Object -TypeName MoodleUserDetails -Property @{
-                    Id        = $_.id
-                    UserName  = $UserName
-                    Auth      = $Auth
-                    FirstName = $FirstName
-                    LastName  = $LastName
-                    Email     = $Email
-                    IdNumber  = $IdNumber
+                    Id         = $_.id
+                    UserName   = $UserName
+                    Auth       = $Auth
+                    FirstName  = $FirstName
+                    LastName   = $LastName
+                    Email      = $Email
+                    Department = $Department
+                    IdNumber   = $IdNumber
                 }
             }
         }
