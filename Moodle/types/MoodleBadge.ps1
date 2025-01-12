@@ -1,17 +1,17 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('TypeNotFound', 'MoodleBadgeType')]
 class MoodleBadge {
-    [uint] $Id
+    [int] $Id
     [string] $Name
     [string] $Description
     [nullable[datetime]] $TimeCreated
     [nullable[datetime]] $TimeModified
-    [uint] $UserCreated
-    [uint] $UserModified
+    [int] $UserCreated
+    [int] $UserModified
     [string] $IssuerName
     [string] $IssuerUrl
     [string] $IssuerContact
     [MoodleBadgeType] $Type
-    [nullable[uint]] $CourseId
+    [nullable[int]] $CourseId
     [string] $Message
     [string] $MessageSubject
     [string] $UniqueHash

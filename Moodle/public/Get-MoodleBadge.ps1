@@ -28,13 +28,13 @@ function Get-MoodleBadge {
         [MoodleUser] $User,
 
         [Parameter(Mandatory, Position = 0, ParameterSetName = 'userid')]
-        [uint] $UserId,
+        [int] $UserId,
 
         [Parameter(Mandatory, ParameterSetName = 'course', ValueFromPipeline)]
         [MoodleCourse] $Course,
 
         [Parameter(Mandatory, ParameterSetName = 'courseid')]
-        [uint] $CourseId
+        [int] $CourseId
     )
 
     Begin {
