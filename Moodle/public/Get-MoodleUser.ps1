@@ -86,6 +86,7 @@ function Get-MoodleUser {
                 FirstName   = $_.firstname
                 LastName    = $_.lastname
                 Email       = $_.email
+                Institution = $_.institution
                 Department  = $_.department
                 IdNumber    = $_.idnumber
                 Suspended   = $_.suspended

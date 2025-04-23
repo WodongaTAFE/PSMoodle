@@ -94,17 +94,18 @@ function Find-MoodleUser {
         $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
         $results.users | ForEach-Object {
             New-Object -TypeName MoodleUserDetails -Property @{
-                Id          = $_.id
-                UserName    = $_.username
-                Auth        = $_.auth
-                FirstName   = $_.firstname
-                LastName    = $_.lastname
-                Email       = $_.email
-                Department  = $_.department
-                IdNumber    = $_.idnumber
-                Suspended   = $_.suspended
-                FirstAccess = if ($_.firstaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.firstaccess).DateTime } else { $null }
-                LastAccess  = if ($_.lastaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.lastaccess).DateTime } else { $null }
+                Id           = $_.id
+                UserName     = $_.username
+                Auth         = $_.auth
+                FirstName    = $_.firstname
+                LastName     = $_.lastname
+                Email        = $_.email
+                Institution  = $_.institution
+                Department   = $_.department
+                IdNumber     = $_.idnumber
+                Suspended    = $_.suspended
+                FirstAccess  = if ($_.firstaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.firstaccess).DateTime } else { $null }
+                LastAccess   = if ($_.lastaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.lastaccess).DateTime } else { $null }
             }
         }
     }

@@ -1,4 +1,6 @@
 class MoodleUserDetails : MoodleUser {
+    [string]$Institution
+    
     [string]$Department
 
     [string]$IdNumber

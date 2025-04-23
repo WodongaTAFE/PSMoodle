@@ -29,6 +29,9 @@ Specifies a new first name for the user.
 .PARAMETER LastName
 Specifies a new last name for the user.
 
+.PARAMETER Institution
+Specifies a new institution for the user.
+
 .PARAMETER Department
 Specifies a new department for the user.
 
@@ -80,6 +83,10 @@ function Set-MoodleUser {
         [Parameter()]
         [string]$LastName,
 
+        # The user's institution.
+        [Parameter()]
+        [string] $Institution,
+        
         # The user's department.
         [Parameter()]
         [string] $Department,
@@ -126,6 +133,7 @@ function Set-MoodleUser {
             firstname = $FirstName
             lastname = $LastName
             email = $Email
+            institution = $Institution
             department = $Department
             idnumber = $IdNumber
             suspended = if ($Suspended) { 1 } else { 0 }
