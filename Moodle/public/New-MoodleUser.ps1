@@ -29,6 +29,9 @@ Specifies the user's institution.
 .PARAMETER Department
 Specifies the user's department.
 
+.PARAMETER Address
+Specifies the user's address.
+
 .PARAMETER IdNumber
 Specifies a free-text ID Number for the new user.
 
@@ -73,6 +76,9 @@ function New-MoodleUser {
         # The user's department.
         [Parameter(ValueFromPipelineByPropertyName)][string] $Department,
 
+        # The user's address.
+        [Parameter(ValueFromPipelineByPropertyName)][string] $Address,
+
         # The external "ID Number" of the user.
         [Parameter(ValueFromPipelineByPropertyName)][string] $IdNumber
     )
@@ -100,6 +106,7 @@ function New-MoodleUser {
             'users[0][institution]' = $Institution
             'users[0][department]'  = $Department
             'users[0][idnumber]'    = $IdNumber
+            'users[0][address]'     = $Address
         }
 
         if ($GeneratePassword) {
@@ -124,6 +131,7 @@ function New-MoodleUser {
                     Email       = $Email
                     Institution = $Institution
                     Department  = $Department
+                    Address     = $Address
                     IdNumber    = $IdNumber
                 }
             }

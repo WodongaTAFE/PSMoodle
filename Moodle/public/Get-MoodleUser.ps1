@@ -88,6 +88,7 @@ function Get-MoodleUser {
                 Email       = $_.email
                 Institution = $_.institution
                 Department  = $_.department
+                Address     = $_.address
                 IdNumber    = $_.idnumber
                 Suspended   = $_.suspended
                 FirstAccess = if ($_.firstaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.firstaccess).DateTime } else { $null }

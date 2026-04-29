@@ -35,6 +35,9 @@ Specifies a new institution for the user.
 .PARAMETER Department
 Specifies a new department for the user.
 
+.PARAMETER Address
+Specifies a new address for the user.
+
 .PARAMETER IdNumber
 Specifies a new free-text ID Number for the user.
 
@@ -90,7 +93,11 @@ function Set-MoodleUser {
         # The user's department.
         [Parameter()]
         [string] $Department,
-        
+
+        # The user's address.
+        [Parameter()]
+        [string] $Address,
+
         # The external "ID Number" of the user.
         [Parameter()]
         [string] $IdNumber,
@@ -135,6 +142,7 @@ function Set-MoodleUser {
             email = $Email
             institution = $Institution
             department = $Department
+            address = $Address
             idnumber = $IdNumber
             suspended = if ($Suspended) { 1 } else { 0 }
         }
