@@ -104,7 +104,10 @@ function Set-MoodleUser {
 
         # True if the user should be suspended.
         [Parameter()]
-        [bool] $Suspended
+        [bool] $Suspended,
+
+        [Parameter()]
+        [hashtable] $CustomFields
     )
 
     Begin {
@@ -146,8 +149,16 @@ function Set-MoodleUser {
             idnumber = $IdNumber
             suspended = if ($Suspended) { 1 } else { 0 }
         }
-        
+
         $body["users[$i][id]"] = $Id
+        if ($CustomFields) {
+            $j = 0
+            foreach ($key in $CustomFields.Keys) {
+                $body["users[$i][customfields][$j][type]"] = $key
+                $body["users[$i][customfields][$j][value]"] = $CustomFields[$key]
+                $j++
+            }
+        }
 
         foreach ($key in $params.Keys) {
             if ($PSBoundParameters.ContainsKey($key)) {

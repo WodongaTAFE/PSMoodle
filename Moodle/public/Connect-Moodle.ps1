@@ -16,6 +16,9 @@ The PSCredential object provides the user ID and password for organizational ID 
 .PARAMETER Token
 Specifies an authentication token, provided by your Moodle administrator.
 
+.PARAMETER SecureToken
+Specifies a secure string token, provided by your Moodle administrator.
+
 .EXAMPLE
 
 Connect-Moodle https://sandbox.moodledemo.net/ -Credential (Get-Credential)
@@ -40,6 +43,10 @@ function Connect-Moodle {
         # The API token to connect to Moodle.
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'token')]
         [string] $Token,
+
+        # The secure API token to connect to Moodle.
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'securetoken')]
+        [SecureString] $SecureToken,
 
         # The proxy address needed to reach your Moodle instance.
         [Parameter(Position = 2)]
@@ -69,7 +76,11 @@ function Connect-Moodle {
     }
 
     $function = 'core_webservice_get_site_info'
-    if ($Credential) {
+    if ($SecureToken) {
+        $marshal = [Runtime.InteropServices.Marshal]
+        $Token = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($SecureToken) )
+    }
+    elseif ($Credential) {
         # Extract plain text password from credential
         $marshal = [Runtime.InteropServices.Marshal]
         $password = $marshal::PtrToStringAuto( $marshal::SecureStringToBSTR($Credential.Password) )

@@ -50,7 +50,7 @@ Gets a cohort whose ID is 1.
 function Get-MoodleCohort {
     [CmdletBinding(DefaultParameterSetName = 'id')]
     param (
-        [Parameter(Mandatory, Position = 0, ParameterSetName = 'id')]
+        [Parameter(Position = 0, ParameterSetName = 'id')]
         [int] $Id,
 
         [Parameter(Mandatory, ParameterSetName = 'system')]
@@ -124,7 +124,7 @@ function Get-MoodleCohort {
             Throw 'You must call the Connect-Moodle cmdlet before calling any other cmdlets.'
         }
 
-        if ($PSBoundParameters.ContainsKey('id')) {
+        if ($PsCmdlet.ParameterSetName -eq 'id') {
             $function = 'core_cohort_get_cohorts'
         }
         else {
@@ -138,7 +138,9 @@ function Get-MoodleCohort {
 
         switch -Wildcard ($PsCmdlet.ParameterSetName) {
             'id' {
-                $path += "&cohortids[0]=$Id"
+                if ($id) {
+                    $path += "&cohortids[0]=$Id"
+                }
                 Write-debug "Request path: $($path -replace 'wstoken=(.*?)&','wstoken=[hidden]&')"
                 $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
                 Break
@@ -191,7 +193,6 @@ function Get-MoodleCohort {
                 $results = (Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings).cohorts
             }
         }
-
 
         if ($results) {
             $results | Foreach-Object {

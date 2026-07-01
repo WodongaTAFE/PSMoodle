@@ -79,7 +79,7 @@ function Get-MoodleUser {
 
         $results = Invoke-RestMethod -Uri ([uri]::new($Url, $path)) @proxySettings
         $results | Foreach-Object {
-            New-Object -TypeName MoodleUserDetails -Property @{
+            $u = New-Object -TypeName MoodleUserDetails -Property @{
                 Id          = $_.id
                 UserName    = $_.username
                 Auth        = $_.auth
@@ -94,6 +94,13 @@ function Get-MoodleUser {
                 FirstAccess = if ($_.firstaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.firstaccess).DateTime } else { $null }
                 LastAccess  = if ($_.lastaccess -gt 0) { [DateTimeOffset]::FromUnixTimeSeconds($_.lastaccess).DateTime } else { $null }
             }
+            if ($_.customfields) {
+                $u.CustomFields = @{}
+                foreach ($cf in $_.customfields) {
+                    $u.CustomFields[$cf.shortname] = $cf.value
+                }
+            }
+            $u
         }
     }
 }

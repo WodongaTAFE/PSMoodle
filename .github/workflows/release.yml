@@ -1,17 +1,49 @@
-name: Release
+name: Publish PowerShell Module
 
-on:
-  release:
-    types: [published]
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
-  build:
-
-    runs-on: windows-latest
-
+  deployment:
+    runs-on: ubuntu-latest
+    env:
+      module_name: Moodle
     steps:
-    - uses: actions/checkout@v1
-    - name: Publish
-      run: |
-        powershell -Command "Publish-Module -Path ./Moodle -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }}"
+      - uses: actions/checkout@v6
+
+      - name: Update psd version
+        shell: pwsh
+        run: |
+          $manifestPath = '${{ github.workspace }}/${{ env.module_name }}/${{ env.module_name }}.psd1'
+          $manifest = Import-PowerShellDataFile $manifestPath
+          [version]$version = $manifest.ModuleVersion
+          [version]$newVersion = "{0}.{1}" -f $Version.Major, ($Version.Minor + 1)
+          Update-ModuleManifest -Path $manifestPath -ModuleVersion $newVersion
+
+          # update-modulemanifest introduces whitepsace so get rid of it
+          (Get-Content $manifestPath).TrimEnd() | Set-Content $manifestPath
+
+          "New version: $newVersion"
+          # set version to be used in later steps
+          "module_new_version=$newVersion" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Update repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ${{ env.module_name }}
+          git status
+          git commit -m "Update manifest to ${{ env.module_new_version }}"
+          git push
+
+      - name: Create GitHub release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: v${{ env.module_new_version }}
+          prerelease: true
+
+      - name: Publish
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        run: |
+          Publish-Module -Path "${{ github.workspace }}/${{ env.module_name }}" -NuGetApiKey ${{ secrets.PSGALLERY_API_KEY }} -Verbose

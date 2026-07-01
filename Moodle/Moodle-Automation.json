@@ -1,0 +1,18 @@
+{
+   "ConnectionFields": [
+   {
+      "IsEncrypted":  false,
+      "IsOptional":  false,
+      "Name":  "Uri",
+      "TypeName":  "System.String"
+   },
+   {
+      "IsEncrypted":  true,
+      "IsOptional":  false,
+      "Name":  "SecureToken",
+      "TypeName":  "System.String"
+   }
+   ],
+   "ConnectionTypeName":  "Moodle",
+   "IntegrationModuleName":  "Moodle"
+}

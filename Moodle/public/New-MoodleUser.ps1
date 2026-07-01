@@ -80,7 +80,10 @@ function New-MoodleUser {
         [Parameter(ValueFromPipelineByPropertyName)][string] $Address,
 
         # The external "ID Number" of the user.
-        [Parameter(ValueFromPipelineByPropertyName)][string] $IdNumber
+        [Parameter(ValueFromPipelineByPropertyName)][string] $IdNumber,
+
+        # Custom fields for the user.
+        [Parameter(ValueFromPipelineByPropertyName)][hashtable] $CustomFields
     )
 
     Begin {
@@ -119,6 +122,15 @@ function New-MoodleUser {
             $body['users[0][password]'] = $pass
         }
 
+        if ($CustomFields) {
+            $i = 0
+            foreach ($key in $CustomFields.Keys) {
+                $body["users[0][customfields][$i][type]"] = $key
+                $body["users[0][customfields][$i][value]"] = $CustomFields[$key]
+                $i++
+            }
+        }
+        
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {
             $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             $results | Foreach-Object {

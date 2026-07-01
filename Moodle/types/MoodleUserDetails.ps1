@@ -14,4 +14,6 @@ class MoodleUserDetails : MoodleUser {
     [nullable[datetime]]$FirstAccess
 
     [nullable[datetime]]$LastAccess
+
+    [hashtable]$CustomFields
 }    
