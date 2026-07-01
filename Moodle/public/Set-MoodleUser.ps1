@@ -154,7 +154,7 @@ function Set-MoodleUser {
         if ($CustomFields) {
             $j = 0
             foreach ($key in $CustomFields.Keys) {
-                $body["users[$i][customfields][$j][type]"] = $key
+                $body["users[$i][customfields][$j][type]"] = $key.ToLower()
                 $body["users[$i][customfields][$j][value]"] = $CustomFields[$key]
                 $j++
             }

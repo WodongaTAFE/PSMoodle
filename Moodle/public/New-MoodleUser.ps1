@@ -125,12 +125,12 @@ function New-MoodleUser {
         if ($CustomFields) {
             $i = 0
             foreach ($key in $CustomFields.Keys) {
-                $body["users[0][customfields][$i][type]"] = $key
+                $body["users[0][customfields][$i][type]"] = $key.ToLower()
                 $body["users[0][customfields][$i][value]"] = $CustomFields[$key]
                 $i++
             }
         }
-        
+
         if ($PSCmdlet.ShouldProcess($UserName, "Create")) {
             $results = Invoke-RestMethod -Method Post -Uri ([uri]::new($Url, $path)) -Body $body -ContentType 'application/x-www-form-urlencoded' @proxySettings
             $results | Foreach-Object {
