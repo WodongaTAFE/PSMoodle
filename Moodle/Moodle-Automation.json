@@ -9,7 +9,7 @@
    {
       "IsEncrypted":  true,
       "IsOptional":  false,
-      "Name":  "SecureToken",
+      "Name":  "Token",
       "TypeName":  "System.String"
    }
    ],
